@@ -1,0 +1,47 @@
+<client-navbar></client-navbar>
+<div class="flex justify-content-center">
+    <p-card header="Existing providers" class="flex-50">
+        <div class="mb-2">
+            <p-dropdown
+                placeholder="Service"
+                [options]="availableServices"
+                [(ngModel)]="selectedService"
+                (ngModelChange)="onServiceSelectionChange()"
+                optionLabel="serviceName"
+            ></p-dropdown>
+        </div>
+        <p-table [value]="providers">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Name</th>
+                    <th>Offered Services</th>
+                    <th>Address</th>
+                    <th>Phone number</th>
+                    <th>Rating</th>
+                    <th>Contract</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-provider>
+                <tr>
+                    <td>{{ provider.name }}</td>
+                    <td>{{ getOfferedServicesString(provider) }}</td>
+                    <td>{{ provider.address }}</td>
+                    <td>{{ provider.phoneNumber }}</td>
+                    <td>{{ provider.rating | rating }}</td>
+                    <td>
+                        <p-button label="Contact" severity="secondary"></p-button>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td [attr.colspan]="6" style="height: 25rem">
+                        <div class="flex justify-content-center">
+                            <i class="pi pi-search mr-1"></i>No results found
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </p-card>
+</div>

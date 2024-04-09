@@ -1,0 +1,26 @@
+<div class="flex justify-content-center">
+    <p-toast></p-toast>
+    <p-card header="Welcome back!" class="flex-50">
+        <span class="p-float-label mt-5">
+            <input type="text" [(ngModel)]="signInDto.username" pInputText/>
+            <label>Username</label>
+        </span>
+        <span class="p-float-label mt-5 mb-2">
+            <p-password [feedback]="false" [toggleMask]="true" [(ngModel)]="signInDto.password"></p-password>
+            <label>Password</label>
+        </span>
+        Don't have an account?
+        <a routerLink="/sign-up" style="text-decoration: none">Sign up!</a>
+        <ng-template pTemplate="footer">
+            <button
+                pButton
+                pRipple
+                label="Login"
+                class="p-button-success"
+                (click)="onSignInClicked()"
+                [disabled]="isSignInEnabled()"
+            >
+            </button>
+        </ng-template>
+    </p-card>
+</div>

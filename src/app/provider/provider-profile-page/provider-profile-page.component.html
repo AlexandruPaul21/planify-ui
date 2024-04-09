@@ -1,0 +1,48 @@
+<provider-navbar></provider-navbar>
+<div class="flex justify-content-center">
+    <p-toast></p-toast>
+    <p-card
+            header="My profile ({{ provider.username.length === 0 ?'username' : provider.username }})"
+            subheader="Rating: 0.0/5" class="flex-50"
+    >
+        <div>
+            <span class="p-float-label mt-5">
+                <input id="name" pInputText [(ngModel)]="provider.name" [readonly]="!editMode"/>
+                <label for="name">Name</label>
+            </span>
+            <span class="p-float-label mt-5">
+                <input id="email" pInputText [(ngModel)]="provider.email" [readonly]="!editMode"/>
+                <label for="email">E-mail</label>
+            </span>
+            <span class="p-float-label mt-5">
+                <input id="fiscal" pInputText [(ngModel)]="provider.fiscalCode" [readonly]="!editMode"/>
+                <label for="fiscal">Fiscal code</label>
+            </span>
+            <span class="p-float-label mt-5">
+                <input id="address" pInputText [(ngModel)]="provider.address" [readonly]="!editMode"/>
+                <label for="address">Address</label>
+            </span>
+            <span class="p-float-label mt-5">
+                <input id="phone" pInputText [(ngModel)]="provider.phoneNumber" [readonly]="!editMode"/>
+                <label for="phone">Phone number</label>
+            </span>
+        </div>
+        <div>
+            <h3>Offered services</h3>
+            <p-listbox [options]="selectedServices" [readonly]="true" *ngIf="!editMode"></p-listbox>
+            <p-listbox
+                    [options]="servicesString"
+                    [(ngModel)]="selectedServices"
+                    [multiple]="true"
+                    *ngIf="editMode"
+            ></p-listbox>
+        </div>
+        <ng-template pTemplate="footer">
+            <button pButton pRipple label="Save" class="p-button-success mr-2" *ngIf="editMode"
+                    (click)="onSaveClicked()"></button>
+            <button pButton pRipple label="Cancel" class="p-button-danger mr-2" *ngIf="editMode"
+                    (click)="onCancelClicked()"></button>
+            <button pButton pRipple label="Edit" *ngIf="!editMode" (click)="editMode = true"></button>
+        </ng-template>
+    </p-card>
+</div>

@@ -1,0 +1,18 @@
+:host ::ng-deep {
+  .p-card-footer {
+    display: flex;
+    justify-content: center;
+  }
+
+  .p-inputtext {
+    width: 100%;
+  }
+
+  .p-password {
+    width: 100%;
+  }
+}
+
+.flex-50 {
+  flex-basis: 50%;
+}

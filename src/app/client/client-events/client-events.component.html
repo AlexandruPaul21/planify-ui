@@ -1,0 +1,29 @@
+<client-navbar></client-navbar>
+<div class="flex justify-content-center">
+    <p-card header="Plan your event!" class="flex-50">
+        <p-dropdown
+            styleClass="mb-3"
+            placeholder="Event"
+            [options]="availableEvents"
+            [(ngModel)]="selectedEvent"
+            (ngModelChange)="onEventSelectedChange()"
+            optionLabel="eventName"
+        ></p-dropdown>
+        <p-dataView [value]="selectedEvent?.services ?? []">
+            <ng-template pTemplate="listItem" let-service>
+                <div class="w-full h-3rem flex justify-content-between align-items-center">
+                    <div>{{ service['serviceName'] }}</div>
+                    <div>
+                        <p-button
+                            label="See providers"
+                            severity="success"
+                            icon="pi pi-chevron-right"
+                            (onClick)="onSeeProvidersClicked(service['serviceName'])"
+                        >
+                        </p-button>
+                    </div>
+                </div>
+            </ng-template>
+        </p-dataView>
+    </p-card>
+</div>

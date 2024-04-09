@@ -1,0 +1,39 @@
+<provider-navbar></provider-navbar>
+<div class="flex justify-content-center">
+    <p-card header="Calendar" class="flex-50">
+        <p-calendar
+            class="max-w-full"
+            [(ngModel)]="selectedDate"
+            [inline]="true"
+        >
+            <ng-template pTemplate="date" let-date>
+                <span [ngStyle]="{ 'color': (containsDate(date)) ? 'red' : 'black'}">{{ date.day }}</span>
+            </ng-template>
+        </p-calendar>
+        <div class="mt-2">
+            <p-table>
+                <ng-template pTemplate="caption">
+                    Contracts for date: {{ selectedDate | date : 'dd-MMM-yyyy' }}
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Service</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>Approved</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td [attr.colspan]="4" style="height: 10rem">
+                            <div class="flex justify-content-center">
+                                <i class="pi pi-search mr-1"></i>No results found
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </p-card>
+</div>
+

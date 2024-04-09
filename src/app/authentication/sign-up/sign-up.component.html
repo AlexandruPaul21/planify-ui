@@ -1,0 +1,111 @@
+<div class="flex justify-content-center">
+    <p-card header="Welcome onboard!" class="flex-50">
+        <p-dropdown
+                [options]="options"
+                [(ngModel)]="selectedOption"
+                placeholder="Register as..."
+        ></p-dropdown>
+        <div *ngIf="selectedOption === 'Client'">
+            <span class="p-float-label mt-5">
+                <input pInputText [(ngModel)]="clientSignUpDto.username"/>
+                <label>Username*</label>
+            </span>
+            <span class="p-float-label mt-5">
+                <input pInputText [(ngModel)]="clientSignUpDto.firstname"/>
+                <label>Firstname*</label>
+            </span>
+            <span class="p-float-label mt-5">
+                <input pInputText [(ngModel)]="clientSignUpDto.lastname"/>
+                <label>Lastname*</label>
+            </span>
+            <span class="p-float-label mt-5">
+                <input pInputText [(ngModel)]="clientSignUpDto.email"/>
+                <label>E-mail*</label>
+            </span>
+            <span class="p-float-label mt-5">
+                <input pInputText [(ngModel)]="clientSignUpDto.address"/>
+                <label>Address*</label>
+            </span>
+            <span class="p-float-label mt-5">
+                <input pInputText [(ngModel)]="clientSignUpDto.phoneNumber"/>
+                <label>Phone number*</label>
+            </span>
+            <span class="p-float-label mt-5">
+                <p-password [toggleMask]="true" [feedback]="false" [(ngModel)]="clientSignUpDto.password"></p-password>
+                <label>Password*</label>
+            </span>
+            <span class="p-float-label mt-5">
+                <p-password [toggleMask]="true" [feedback]="false" [(ngModel)]="clientConfirmPassword"></p-password>
+                <label>Repeat password*</label>
+            </span>
+            <span class="p-float-label mt-5">
+                <p-inputNumber mode="currency" currency="EUR" [(ngModel)]="clientSignUpDto.budget"></p-inputNumber>
+                <label>Budget*</label>
+            </span>
+        </div>
+        <div *ngIf="selectedOption === 'Provider'">
+            <span class="p-float-label mt-5">
+                <input pInputText [(ngModel)]="providerSignUpDto.username"/>
+                <label>Username*</label>
+            </span>
+            <span class="p-float-label mt-5">
+                <input pInputText [(ngModel)]="providerSignUpDto.name"/>
+                <label>Name*</label>
+            </span>
+            <span class="p-float-label mt-5">
+                <input pInputText [(ngModel)]="providerSignUpDto.email"/>
+                <label>E-mail*</label>
+            </span>
+            <span class="p-float-label mt-5">
+                <input pInputText [(ngModel)]="providerSignUpDto.address"/>
+                <label>Address*</label>
+            </span>
+            <span class="p-float-label mt-5">
+                <input pInputText [(ngModel)]="providerSignUpDto.phoneNumber"/>
+                <label>Phone number*</label>
+            </span>
+            <span class="p-float-label mt-5">
+                <input pInputText [(ngModel)]="providerSignUpDto.fiscalCode"/>
+                <label>Fiscal code*</label>
+            </span>
+            <span class="p-float-label mt-5">
+                <p-password
+                    [toggleMask]="true"
+                    [feedback]="false"
+                    [(ngModel)]="providerSignUpDto.password"
+                ></p-password>
+                <label>Password*</label>
+            </span>
+            <span class="p-float-label mt-5 mb-3">
+                <p-password
+                    [toggleMask]="true"
+                    [feedback]="false"
+                    [(ngModel)]="providerConfirmPassword"
+                ></p-password>
+                <label>Repeat password*</label>
+            </span>
+            <span>
+                <label>Offered services*</label>
+                <p-listbox
+                    [options]="services"
+                    [(ngModel)]="selectedServices"
+                    [multiple]="true"
+                ></p-listbox>
+            </span>
+        </div>
+        <div class="mt-2">
+            Already have an account?
+            <a routerLink="/login" style="text-decoration: none">Login</a>
+        </div>
+        <ng-template pTemplate="footer">
+            <button
+                pButton
+                pRipple
+                label="Sign up"
+                class="p-button-success"
+                (click)="onSignUpClicked()"
+                [disabled]="!isSignUpEnabled()"
+            ></button>
+        </ng-template>
+    </p-card>
+</div>

@@ -1,0 +1,38 @@
+<client-navbar></client-navbar>
+<div class="flex justify-content-center">
+    <p-card header="My contracts" class="flex-50">
+        <p-table [value]="contracts">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Service</th>
+                    <th>Status</th>
+                    <th>Price</th>
+                    <th>Advance payment</th>
+                    <th>Approved by provider</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-contract>
+                <tr>
+                    <td>{{ contract.service['serviceName'] }}</td>
+                    <td>{{ contract.status | titlecase }}</td>
+                    <td>{{ contract.price }}</td>
+                    <td>{{ contract.advancePayment }}</td>
+                    <td>
+                        <i
+                            class="pi pi-circle-fill {{ contract.providerApproved ? 'color-green' : 'color-red' }}"
+                        ></i>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td [attr.colspan]="5" style="height: 25rem">
+                        <div class="flex justify-content-center">
+                            <i class="pi pi-search mr-1"></i>No results found
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </p-card>
+</div>

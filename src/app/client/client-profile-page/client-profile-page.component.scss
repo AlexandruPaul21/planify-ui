@@ -1,0 +1,13 @@
+:host ::ng-deep {
+  .p-inputtext {
+    width: 100%;
+  }
+
+  p-inputnumber, .p-inputnumber {
+    display: inline;
+  }
+}
+
+.flex-50 {
+  flex-basis: 50%;
+}

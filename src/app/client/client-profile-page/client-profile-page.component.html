@@ -1,0 +1,43 @@
+<client-navbar></client-navbar>
+<div class="flex justify-content-center">
+    <p-toast></p-toast>
+    <p-card
+            header="My profile ({{ client.username.length === 0 ? 'username' : client.username }})"
+            subheader="Rating: {{ client.rating | rating }}" class="flex-50"
+    >
+        <div>
+            <span class="p-float-label mt-5">
+                <input id="firstname" pInputText [(ngModel)]="client.firstname" [readonly]="!editMode"/>
+                <label for="firstname">First name</label>
+            </span>
+            <span class="p-float-label mt-5">
+                <input id="lastname" pInputText [(ngModel)]="client.lastname" [readonly]="!editMode"/>
+                <label for="lastname">Last name</label>
+            </span>
+            <span class="p-float-label mt-5">
+                <input id="email" pInputText [(ngModel)]="client.email" [readonly]="!editMode"/>
+                <label for="email">E-mail</label>
+            </span>
+            <span class="p-float-label mt-5">
+                <input id="address" pInputText [(ngModel)]="client.address" [readonly]="!editMode"/>
+                <label for="address">Address</label>
+            </span>
+            <span class="p-float-label mt-5">
+                <input id="phone" pInputText [(ngModel)]="client.phoneNumber" [readonly]="!editMode"/>
+                <label for="phone">Phone number</label>
+            </span>
+            <span class="p-float-label mt-5">
+                <p-inputNumber mode="currency" currency="EUR" [(ngModel)]="client.budget"
+                               [readonly]="!editMode"></p-inputNumber>
+                <label>Budget</label>
+            </span>
+        </div>
+        <ng-template pTemplate="footer">
+            <button pButton pRipple label="Save" class="p-button-success mr-2" *ngIf="editMode"
+                    (click)="onSaveClicked()"></button>
+            <button pButton pRipple label="Cancel" class="p-button-danger mr-2" *ngIf="editMode"
+                    (click)="onCancelClicked()"></button>
+            <button pButton pRipple label="Edit" *ngIf="!editMode" (click)="editMode = true"></button>
+        </ng-template>
+    </p-card>
+</div>

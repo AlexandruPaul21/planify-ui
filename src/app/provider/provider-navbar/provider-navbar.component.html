@@ -1,0 +1,9 @@
+<p-menubar [model]="providerMenuItems">
+    <ng-template pTemplate="start">
+        <img src="favicon.ico" alt="" height="40"/>
+    </ng-template>
+    <ng-template pTemplate="end">
+        <p-button icon="pi pi-sign-out" label="Logout" [text]="true" [plain]="true"
+                  (onClick)="onLogoutPressed()"></p-button>
+    </ng-template>
+</p-menubar>
