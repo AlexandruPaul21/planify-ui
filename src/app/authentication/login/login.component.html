@@ -17,8 +17,12 @@
                 pRipple
                 label="Login"
                 class="p-button-success"
+                icon="{{ loading ? 'pi pi-spin pi-spinner' : '' }}"
+                iconPos="right"
                 (click)="onSignInClicked()"
-                [disabled]="isSignInEnabled()"
+                [disabled]="!isSignInEnabled()"
+                style="pointer-events: auto"
+                [pTooltip]="loginErrorMessages"
             >
             </button>
         </ng-template>

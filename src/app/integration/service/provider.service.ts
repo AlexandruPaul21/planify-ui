@@ -13,6 +13,12 @@ export class ProviderService {
     constructor(private http: HttpClient) {
     }
 
+    public getByUsername(username: string): Promise<ProviderDto> {
+      return promiseFromObservable(this.http
+            .get<ProviderDto>(SERVER_URL + `/providers/username/${ username }`, { headers: getAuthorizedHeaders() })
+      );
+    }
+
     public getById(id: string): Promise<ProviderDto> {
         return promiseFromObservable(this.http
             .get<ProviderDto>(SERVER_URL + `/providers/${ id }`, { headers: getAuthorizedHeaders() })

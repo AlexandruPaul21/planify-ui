@@ -19,6 +19,9 @@ export class SignUpComponent implements OnInit {
   public availableServices: ServiceDto[] = [];
   public services: string[] = [];
   public selectedServices: string[] = [];
+  public validationMessage = 'None of the user options are selected!';
+
+  public loading: boolean = false;
 
   public clientSignUpDto: ClientSignUpDto = {
     firstname: '',
@@ -57,6 +60,7 @@ export class SignUpComponent implements OnInit {
   ) {}
 
   public async onSignUpClicked(): Promise<void> {
+    this.loading = false;
     try {
       switch (this.selectedOption) {
         case "Client":
@@ -80,6 +84,8 @@ export class SignUpComponent implements OnInit {
       );
     } catch (e) {
       this.showErrorMessage();
+    } finally {
+      this.loading = true;
     }
   }
 
@@ -98,17 +104,92 @@ export class SignUpComponent implements OnInit {
       case 'Provider':
         return this.validateProvider();
       case '':
+        this.validationMessage = 'None of the user types are selected!'
         return false;
     }
   }
 
-  // TODO
   private validateClient(): boolean {
-    return this.clientSignUpDto.username.length > 0;
+    this.validationMessage = '';
+
+    if (this.clientSignUpDto.username.length < 6) {
+      this.validationMessage += 'Username should have length at least 6!\n';
+    }
+
+    if (this.clientSignUpDto.address.length === 0) {
+      this.validationMessage += 'Address should not empty!\n';
+    }
+
+    if (this.clientSignUpDto.email.length === 0) {
+      this.validationMessage += 'Email should not empty!\n';
+    }
+
+    if (this.clientSignUpDto.phoneNumber.length === 0) {
+      this.validationMessage += 'Phone Number should not empty!\n';
+    }
+
+    if (this.clientSignUpDto.budget === 0) {
+      this.validationMessage += 'Budget should not 0!\n';
+    }
+
+    if (this.clientSignUpDto.password.length < 7) {
+      this.validationMessage += 'Password should have at length at least 7!\n';
+    }
+
+    if (this.clientSignUpDto.firstname.length === 0) {
+      this.validationMessage += 'Firstname should not empty!\n';
+    }
+
+    if (this.clientSignUpDto.lastname.length === 0) {
+      this.validationMessage += 'Lastname should not empty!\n';
+    }
+
+    if (this.clientSignUpDto.password !== this.clientConfirmPassword) {
+      this.validationMessage += 'Passwords should match!';
+    }
+
+    return this.validationMessage === '';
   }
 
-  // TODO
   private validateProvider(): boolean {
-    return this.providerSignUpDto.username.length > 0;
+    this.validationMessage = '';
+
+    if (this.providerSignUpDto.username.length < 6) {
+      this.validationMessage += 'Username should have length at least 6 characters!\n';
+    }
+
+    if (this.providerSignUpDto.name.length === 0) {
+      this.validationMessage += 'Name should not be empty!\n';
+    }
+
+    if (this.providerSignUpDto.email.length === 0) {
+      this.validationMessage += 'Email should not be empty!\n';
+    }
+
+    if (this.providerSignUpDto.address.length === 0) {
+      this.validationMessage += 'Address should not be empty!\n';
+    }
+
+    if (this.providerSignUpDto.password.length < 7) {
+      this.validationMessage += 'Password should have at least 7 characters!\n';
+    }
+
+    if (this.providerSignUpDto.fiscalCode.length === 0) {
+      this.validationMessage += 'Fiscal Code should not be empty!\n';
+    }
+
+    if (this.providerSignUpDto.offeredServices.length === 0) {
+      this.validationMessage += 'Provider should offer at least one service\n';
+    }
+
+    if (this.providerSignUpDto.phoneNumber.length === 0) {
+      this.validationMessage += 'Phone number should not be empty!\n';
+    }
+
+    if (this.providerSignUpDto.password !== this.clientConfirmPassword) {
+      this.validationMessage += 'Passwords should match!';
+    }
+
+    return this.validationMessage === '';
   }
 }

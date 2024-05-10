@@ -1,0 +1,10 @@
+<div
+    class="status-chip flex align-items-center"
+    style="width: fit-content"
+    [style.color]="statusChipUi.color"
+    [style.border]="'1px solid ' + statusChipUi.color"
+    [pTooltip]="statusChipUi.tooltip"
+>
+    <i *ngIf="statusChipUi.icon as icon" class="status-chip-icon pi" [class]="icon"></i>
+    <p class="ml-2 mr-2 status-chip-label">{{ status | stripUnderscore | titlecase }}</p>
+</div>

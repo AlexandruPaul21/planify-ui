@@ -1,0 +1,26 @@
+.status-chip {
+  border-radius: 25px;
+  padding: 0.25rem;
+
+  .icon-placeholder {
+    visibility: hidden;
+  }
+
+  .status-chip-icon,
+  .icon-placeholder {
+    width: 1rem;
+    height: 1rem;
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+  }
+
+  .status-chip-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin: 0;
+    font-weight: 500;
+    font-size: 1rem;
+  }
+}

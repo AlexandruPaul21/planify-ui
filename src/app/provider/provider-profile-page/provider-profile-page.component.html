@@ -38,11 +38,31 @@
             ></p-listbox>
         </div>
         <ng-template pTemplate="footer">
-            <button pButton pRipple label="Save" class="p-button-success mr-2" *ngIf="editMode"
-                    (click)="onSaveClicked()"></button>
+            <button
+                pButton
+                pRipple
+                label="Save"
+                class="p-button-success mr-2"
+                *ngIf="editMode"
+                [disabled]="!isSaveEnabled()"
+                style="pointer-events: auto"
+                [pTooltip]="validationMessage"
+                (click)="onSaveClicked()"
+            ></button>
             <button pButton pRipple label="Cancel" class="p-button-danger mr-2" *ngIf="editMode"
                     (click)="onCancelClicked()"></button>
             <button pButton pRipple label="Edit" *ngIf="!editMode" (click)="editMode = true"></button>
         </ng-template>
     </p-card>
 </div>
+<p-dialog
+    [(visible)]="loading"
+    [focusTrap]="true"
+    [draggable]="false"
+    [showHeader]="false"
+    [modal]="true"
+    [closable]="false"
+    [style]="{ width: '30%' }"
+>
+    <p-progressSpinner class="progress-spinner"></p-progressSpinner>
+</p-dialog>

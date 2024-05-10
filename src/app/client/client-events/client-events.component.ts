@@ -7,21 +7,25 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-client-events',
   templateUrl: './client-events.component.html',
-  styleUrls: ['./client-events.component.scss']
+  styleUrls: ['./client-events.component.scss'],
 })
 export class ClientEventsComponent implements OnInit {
   public availableEvents: EventDto[] = [];
   public selectedEvent: EventDto | null = null;
 
   public services: ServiceDto[] = [];
+  public loading: boolean = false;
 
   public constructor(
     private eventService: EventService,
     private router: Router,
-  ) {}
+  ) {
+  }
 
   public async ngOnInit(): Promise<void> {
+    this.loading = true;
     this.availableEvents = await this.eventService.getAllEvents();
+    this.loading = false;
   }
 
   public onEventSelectedChange(): void {

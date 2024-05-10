@@ -10,6 +10,8 @@ import { ClientProfilePageComponent } from './client/client-profile-page/client-
 import { ProviderProfilePageComponent } from './provider/provider-profile-page/provider-profile-page.component';
 import { ProviderCalendarComponent } from './provider/provider-calendar/provider-calendar.component';
 import { ProviderInvoicesComponent } from './provider/provider-invoices/provider-invoices.component';
+import { NewContractPageComponent } from './client/new-contract-page/new-contract-page.component';
+import { ContractDetailsPageComponent } from './contract/contract-details-page/contract-details-page.component';
 
 const routes: Routes = [
   {
@@ -40,6 +42,14 @@ const routes: Routes = [
   {
     path: 'client/profile',
     component: ClientProfilePageComponent,
+  },
+  {
+    path: 'client/new-contract',
+    component: NewContractPageComponent,
+  },
+  {
+    path: 'contract/:id',
+    component: ContractDetailsPageComponent,
   },
   {
     path: 'provider/contracts',

@@ -1,0 +1,65 @@
+<client-navbar></client-navbar>
+<div class="flex justify-content-center">
+    <p-toast></p-toast>
+    <p-card
+        header="Send a request for contract to {{ provider.name }}"
+        class="flex-50">
+        <div>
+            <p-dropdown
+                placeholder="Service*"
+                [options]="provider.offeredServices"
+                [(ngModel)]="contract.service"
+                optionLabel="serviceName"
+            ></p-dropdown>
+        </div>
+
+        <span class="p-float-label mt-5">
+            <p-inputNumber mode="currency" currency="EUR" [(ngModel)]="contract.price"></p-inputNumber>
+            <label>Price*</label>
+        </span>
+
+        <span class="p-float-label mt-5">
+            <p-inputNumber mode="currency" currency="EUR" [(ngModel)]="contract.advancePayment"></p-inputNumber>
+            <label>Advance Payment*</label>
+        </span>
+
+        <span class="p-float-label mt-5">
+            <input id="notes" pInputText [(ngModel)]="contract.clientNotes"/>
+            <label for="notes">Notes</label>
+        </span>
+
+        <div class="flex flex-column mt-3">
+            <div style="font-size: 12px" class="ml-2">Date*</div>
+            <div class="mt-2">
+                <p-calendar
+                    [(ngModel)]="contract.contractDate"
+                    dateFormat="dd.mm.yy"
+                ></p-calendar>
+            </div>
+        </div>
+
+        <ng-template pTemplate="footer">
+            <button
+                pButton
+                pRipple
+                label="Save"
+                class="p-button-success mr-2"
+                [disabled]="!isSaveEnabled()"
+                style="pointer-events: auto"
+                [pTooltip]="validationMessage"
+                (click)="onSaveClicked()"
+            ></button>
+        </ng-template>
+    </p-card>
+</div>
+<p-dialog
+    [(visible)]="loading"
+    [focusTrap]="true"
+    [draggable]="false"
+    [showHeader]="false"
+    [modal]="true"
+    [closable]="false"
+    [style]="{ width: '30%' }"
+>
+    <p-progressSpinner class="progress-spinner"></p-progressSpinner>
+</p-dialog>

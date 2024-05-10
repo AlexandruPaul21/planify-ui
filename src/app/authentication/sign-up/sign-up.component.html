@@ -103,8 +103,12 @@
                 pRipple
                 label="Sign up"
                 class="p-button-success"
+                icon="{{ loading ? 'pi pi-spin pi-spinner' : '' }}"
+                iconPos="right"
                 (click)="onSignUpClicked()"
+                style="pointer-events: auto"
                 [disabled]="!isSignUpEnabled()"
+                [pTooltip]="validationMessage"
             ></button>
         </ng-template>
     </p-card>

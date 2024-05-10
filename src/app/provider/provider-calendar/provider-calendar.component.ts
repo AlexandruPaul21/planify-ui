@@ -8,6 +8,7 @@ import { Component } from '@angular/core';
 export class ProviderCalendarComponent {
   public selectedDate: Date = new Date();
   public dates: Date[] = [new Date("2024-02-14"), new Date("2024-03-10")];
+  public loading: boolean = false;
 
   public containsDate(date: any): boolean {
     return this.dates.find((actualDate) => this.equalDates(actualDate, date)) != null;

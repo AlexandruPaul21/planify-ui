@@ -1,0 +1,13 @@
+:host ::ng-deep {
+  .p-dialog-content {
+    background: fixed;
+  }
+
+  .progress-spinner {
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    width: 50%;
+    height: 50%;
+  }
+}

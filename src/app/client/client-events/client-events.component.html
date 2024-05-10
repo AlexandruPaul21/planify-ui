@@ -27,3 +27,14 @@
         </p-dataView>
     </p-card>
 </div>
+<p-dialog
+    [(visible)]="loading"
+    [focusTrap]="true"
+    [draggable]="false"
+    [showHeader]="false"
+    [modal]="true"
+    [closable]="false"
+    [style]="{ width: '30%' }"
+>
+    <p-progressSpinner class="progress-spinner"></p-progressSpinner>
+</p-dialog>

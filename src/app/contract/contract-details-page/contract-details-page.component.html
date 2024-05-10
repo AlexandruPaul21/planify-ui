@@ -1,0 +1,79 @@
+<client-navbar></client-navbar>
+<div class="flex justify-content-center">
+    <p-toast></p-toast>
+    <p-card
+        header="Contract for {{ contract.service.serviceName }} with {{ contract.provider.name }}"
+        class="flex-50"
+        *ngIf="contract"
+    >
+        <status-chip
+            [status]="contract.status"
+        ></status-chip>
+
+        <span class="p-float-label mt-5">
+            <p-inputNumber
+                mode="currency"
+                currency="EUR"
+                [(ngModel)]="contract.price"
+                [readonly]="true"
+            ></p-inputNumber>
+            <label>Price</label>
+        </span>
+
+        <span class="p-float-label mt-5">
+            <p-inputNumber
+                mode="currency"
+                currency="EUR"
+                [(ngModel)]="contract.advancePayment"
+                [readonly]="true"
+            ></p-inputNumber>
+            <label>Advance Payment</label>
+        </span>
+
+        <span class="p-float-label mt-5">
+            <input
+                id="notes"
+                pInputText
+                [(ngModel)]="contract.clientNotes"
+                [readonly]="true"
+            />
+            <label for="notes">Your notes</label>
+        </span>
+
+        <span class="p-float-label mt-5">
+            <input
+                id="provider-notes"
+                pInputText
+                [(ngModel)]="contract.providerNotes"
+                [readonly]="true"
+            />
+            <label for="provider-notes">Provider notes</label>
+        </span>
+
+        <div class="flex flex-column mt-3">
+            <div style="font-size: 12px" class="ml-2">Date</div>
+            <div class="mt-2">
+                <p-calendar
+                    [(ngModel)]="contract.contractDate"
+                    [disabled]="true"
+                    dateFormat="dd.mm.yy"
+                ></p-calendar>
+            </div>
+        </div>
+
+        <ng-template pTemplate="footer">
+
+        </ng-template>
+    </p-card>
+</div>
+<p-dialog
+    [(visible)]="loading"
+    [focusTrap]="true"
+    [draggable]="false"
+    [showHeader]="false"
+    [modal]="true"
+    [closable]="false"
+    [style]="{ width: '30%' }"
+>
+    <p-progressSpinner class="progress-spinner"></p-progressSpinner>
+</p-dialog>

@@ -13,6 +13,8 @@ import { promiseFromObservable } from '../../integration/utils/rest-utils';
 })
 export class LoginComponent implements OnInit {
   public signInDto: SignInDto;
+  public loginErrorMessages = '';
+  public loading: boolean = false;
 
   public constructor(
     private authenticationService: AuthenticationService,
@@ -35,6 +37,7 @@ export class LoginComponent implements OnInit {
   }
 
   public async onSignInClicked(): Promise<void> {
+    this.loading = true;
     try {
       const response = await this.authenticationService.signIn(this.signInDto);
       localStorage.setItem('token', response.token);
@@ -50,10 +53,21 @@ export class LoginComponent implements OnInit {
         summary: 'Login failed',
         detail: 'Invalid username and password combination'
       });
+    } finally {
+      this.loading = false;
     }
   }
 
   public isSignInEnabled(): boolean {
-    return !(this.signInDto.username.length > 0 && this.signInDto.password.length > 0);
+    this.loginErrorMessages = '';
+    if (this.signInDto.username.length === 0) {
+      this.loginErrorMessages += 'Username is empty!\n';
+    }
+
+    if (this.signInDto.password.length === 0) {
+      this.loginErrorMessages += 'Password is empty!';
+    }
+
+    return this.loginErrorMessages === '';
   }
 }

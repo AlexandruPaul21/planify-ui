@@ -37,6 +37,12 @@ import { ProviderInvoicesComponent } from './provider/provider-invoices/provider
 import { ToastModule } from "primeng/toast";
 import { MessagesModule } from 'primeng/messages';
 import { RatingPipe } from './utils/pipes/rating.pipe';
+import { NewContractPageComponent } from './client/new-contract-page/new-contract-page.component';
+import { ContractDetailsPageComponent } from './contract/contract-details-page/contract-details-page.component';
+import { StatusChipComponent } from './contract/status-chip/status-chip.component';
+import { StripUnderscorePipe } from './utils/pipes/strip-underscore.pipe';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
   declarations: [
@@ -53,7 +59,11 @@ import { RatingPipe } from './utils/pipes/rating.pipe';
     ProviderNavbarComponent,
     ProviderCalendarComponent,
     ProviderInvoicesComponent,
-    RatingPipe
+    RatingPipe,
+    NewContractPageComponent,
+    ContractDetailsPageComponent,
+    StatusChipComponent,
+    StripUnderscorePipe
   ],
   imports: [
     BrowserAnimationsModule,
@@ -80,6 +90,8 @@ import { RatingPipe } from './utils/pipes/rating.pipe';
     PickListModule,
     ToastModule,
     MessagesModule,
+    ProgressSpinnerModule,
+    DialogModule,
   ],
   providers: [RatingPipe],
   bootstrap: [AppComponent]

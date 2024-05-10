@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./provider-contracts.component.scss']
 })
 export class ProviderContractsComponent {
-
+  public loading: boolean = false;
 }

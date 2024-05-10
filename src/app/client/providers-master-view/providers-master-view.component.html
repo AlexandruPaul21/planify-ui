@@ -29,7 +29,11 @@
                     <td>{{ provider.phoneNumber }}</td>
                     <td>{{ provider.rating | rating }}</td>
                     <td>
-                        <p-button label="Contact" severity="secondary"></p-button>
+                        <p-button
+                            label="Contact"
+                            severity="secondary"
+                            (onClick)="onContactProviderClicked(provider)"
+                        ></p-button>
                     </td>
                 </tr>
             </ng-template>
@@ -45,3 +49,14 @@
         </p-table>
     </p-card>
 </div>
+<p-dialog
+    [(visible)]="loading"
+    [focusTrap]="true"
+    [draggable]="false"
+    [showHeader]="false"
+    [modal]="true"
+    [closable]="false"
+    [style]="{ width: '30%' }"
+>
+    <p-progressSpinner class="progress-spinner"></p-progressSpinner>
+</p-dialog>
