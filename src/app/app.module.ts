@@ -47,6 +47,7 @@ import { RatingModule } from "primeng/rating";
 import { ReviewsTabComponent } from './review/reviews-tab/reviews-tab.component';
 import { ReviewEntryComponent } from './review/review-entry/review-entry.component';
 import { InputTextareaModule } from "primeng/inputtextarea";
+import { AutoCompleteModule } from "primeng/autocomplete";
 
 @NgModule({
   declarations: [
@@ -100,6 +101,7 @@ import { InputTextareaModule } from "primeng/inputtextarea";
     DialogModule,
     RatingModule,
     InputTextareaModule,
+    AutoCompleteModule,
   ],
   providers: [RatingPipe],
   bootstrap: [AppComponent]

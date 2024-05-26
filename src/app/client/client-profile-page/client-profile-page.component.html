@@ -20,7 +20,13 @@
                 <label for="email">E-mail</label>
             </span>
             <span class="p-float-label mt-5">
-                <input id="address" pInputText [(ngModel)]="client.address" [readonly]="!editMode"/>
+                <p-autoComplete
+                    id="address"
+                    [(ngModel)]="client.address"
+                    [readonly]="!editMode"
+                    [suggestions]="suggestions"
+                    (completeMethod)="completeResults($event.query)"
+                ></p-autoComplete>
                 <label for="address">Address</label>
             </span>
             <span class="p-float-label mt-5">

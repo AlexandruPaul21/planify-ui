@@ -20,7 +20,13 @@
                 <label for="fiscal">Fiscal code</label>
             </span>
             <span class="p-float-label mt-5">
-                <input id="address" pInputText [(ngModel)]="provider.address" [readonly]="!editMode"/>
+                <p-autoComplete
+                    id="address"
+                    [(ngModel)]="provider.address"
+                    [readonly]="!editMode"
+                    [suggestions]="suggestions"
+                    (completeMethod)="completeResults($event.query)"
+                ></p-autoComplete>
                 <label for="address">Address</label>
             </span>
             <span class="p-float-label mt-5">

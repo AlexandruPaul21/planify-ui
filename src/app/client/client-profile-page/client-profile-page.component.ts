@@ -7,6 +7,7 @@ import { EMAIL_REGEX } from '../../utils/validation';
 import { calculateRating, filterReviews } from '../../review/utils/review-utils';
 import { ReviewDto } from '../../integration/domain/ReviewDto';
 import ReviewType = ReviewDto.ReviewTypeEnum;
+import { MapsService } from '../../integration/service/maps.service';
 
 @Component({
   selector: 'app-client-profile-page',
@@ -19,6 +20,7 @@ export class ClientProfilePageComponent implements OnInit {
   protected readonly ReviewType = ReviewType;
   public editMode = false;
   public validationMessage = '';
+  public suggestions: string[] = [];
 
   public client: ClientDto = {
     id: '',
@@ -38,6 +40,7 @@ export class ClientProfilePageComponent implements OnInit {
     private router: Router,
     private clientService: ClientService,
     private messageService: MessageService,
+    private mapsService: MapsService,
   ) {
   }
 
@@ -126,6 +129,11 @@ export class ClientProfilePageComponent implements OnInit {
         });
       }
     }
+  }
+
+  public async completeResults(query: string) {
+    const result = await this.mapsService.getAutocomplete(query);
+    this.suggestions = result.predictions.map(place => place.description);
   }
 
   protected readonly filterReviews = filterReviews;

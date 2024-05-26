@@ -9,6 +9,7 @@ import { EMAIL_REGEX } from '../../utils/validation';
 import { calculateRating, filterReviews } from '../../review/utils/review-utils';
 import { ReviewDto } from '../../integration/domain/ReviewDto';
 import ReviewType = ReviewDto.ReviewTypeEnum;
+import { MapsService } from '../../integration/service/maps.service';
 
 @Component({
   selector: 'app-provider-profile-page',
@@ -27,6 +28,7 @@ export class ProviderProfilePageComponent implements OnInit {
   public selectedServices: string[] = [];
 
   public validationMessage = '';
+  public suggestions: string[] = [];
 
   public provider: ProviderDto = {
     id: '',
@@ -48,6 +50,7 @@ export class ProviderProfilePageComponent implements OnInit {
     private router: Router,
     private providerService: ProviderService,
     private messageService: MessageService,
+    private mapsService: MapsService,
   ) {
   }
 
@@ -135,6 +138,12 @@ export class ProviderProfilePageComponent implements OnInit {
       }
     }
   }
+
+  public async completeResults(query: string) {
+    const result = await this.mapsService.getAutocomplete(query);
+    this.suggestions = result.predictions.map(place => place.description);
+  }
+
 
   public async reviewsUpdated(): Promise<void> {
     await this.ngOnInit();
