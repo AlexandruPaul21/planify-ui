@@ -30,7 +30,6 @@ export class ContractOverviewTableComponent implements OnInit{
   }
 
   public async ngOnInit(): Promise<void> {
-    this.loading = true;
     const entityId = localStorage.getItem('id')!!;
 
     this.route.paramMap.subscribe(async params => {
@@ -41,7 +40,7 @@ export class ContractOverviewTableComponent implements OnInit{
       if (status == null) {
         this.contracts = await this.contractService.getAllContracts(entityId);
         this.loading = false;
-        return ;
+        return;
       }
 
       if (status === 'finished') {
@@ -50,9 +49,7 @@ export class ContractOverviewTableComponent implements OnInit{
         this.contracts = await this.contractService.getAllActiveContractsByClientId(entityId);
       }
       this.loading = false;
-    })
-
-    this.loading = false;
+    });
   }
 
   public async onClickContractRow(contract: ContractDto): Promise<void> {
