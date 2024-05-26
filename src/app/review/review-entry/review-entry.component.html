@@ -1,0 +1,18 @@
+<p-card>
+    <ng-template pTemplate="title">
+        <div class="flex justify-content-between">
+            {{ review.title }}
+            <p-button
+                *ngIf="owner"
+                icon="pi pi-trash"
+                severity="danger"
+                [outlined]="true"
+                (onClick)="deleteReview()"
+            ></p-button>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="subtitle">
+        <p-rating [cancel]="false" [ngModel]="review.rating" [readonly]="true"></p-rating>
+    </ng-template>
+    {{ review.text }}
+</p-card>

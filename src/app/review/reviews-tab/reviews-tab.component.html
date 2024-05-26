@@ -1,0 +1,12 @@
+<p-card [header]="header" [subheader]="subheader">
+    <div *ngFor="let review of reviews" class="mt-1">
+        <review-entry
+            [review]="review"
+            [owner]="owner"
+            (reviewsChanged)="reviewsChanged.emit()"
+        ></review-entry>
+    </div>
+    <div *ngIf="reviews.length === 0">
+        <i>No reviews yet</i>
+    </div>
+</p-card>

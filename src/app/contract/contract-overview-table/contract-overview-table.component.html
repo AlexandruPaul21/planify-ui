@@ -1,4 +1,9 @@
-<client-navbar></client-navbar>
+<div *ngIf="actualRole === 'CLIENT'">
+    <client-navbar></client-navbar>
+</div>
+<div *ngIf="actualRole === 'PROVIDER'">
+    <provider-navbar></provider-navbar>
+</div>
 <div class="flex justify-content-center">
     <p-card header="My contracts" class="flex-50">
         <p-table [value]="contracts">
@@ -6,7 +11,7 @@
                 <tr>
                     <th>Service</th>
                     <th>Status</th>
-                    <th>Provider</th>
+                    <th>{{ actualRole === 'PROVIDER' ? 'Client' : 'Provider' }}</th>
                     <th>Price</th>
                     <th>Advance Payment</th>
                     <th>Date</th>
@@ -22,9 +27,9 @@
                             [status]="contract.status"
                         ></status-chip>
                     </td>
-                    <td>{{ contract.provider.name }}</td>
-                    <td>{{ contract.price }}</td>
-                    <td>{{ contract.advancePayment }}</td>
+                    <td>{{ actualRole === 'PROVIDER' ? contract.client.firstname : contract.provider.name }}</td>
+                    <td>{{ contract.price | currency : 'EUR' }}</td>
+                    <td>{{ contract.advancePayment | currency : 'EUR' }}</td>
                     <td>{{ contract.contractDate | date : 'dd MMM yyyy' }}</td>
                 </tr>
             </ng-template>
@@ -49,5 +54,7 @@
     [closable]="false"
     [style]="{ width: '30%' }"
 >
-    <p-progressSpinner class="progress-spinner"></p-progressSpinner>
+    <ng-template pTemplate="content">
+        <p-progressSpinner class="progress-spinner"></p-progressSpinner>
+    </ng-template>
 </p-dialog>

@@ -1,4 +1,5 @@
 import { ServiceDto } from './ServiceDto';
+import { ReviewDto } from './ReviewDto';
 
 export interface ProviderDto {
   id: string;
@@ -10,6 +11,6 @@ export interface ProviderDto {
   phoneNumber: string;
   offeredServices: Array<ServiceDto>;
   revenue: number;
-  rating: number;
+  reviews: Array<ReviewDto>;
   createdAt: Date;
 }

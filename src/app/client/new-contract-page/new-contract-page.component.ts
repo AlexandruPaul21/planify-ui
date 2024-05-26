@@ -26,7 +26,7 @@ export class NewContractPageComponent implements OnInit {
     fiscalCode: '',
     address: '',
     phoneNumber: '',
-    rating: 0,
+    reviews: [],
     createdAt: new Date()
   };
 
@@ -44,8 +44,8 @@ export class NewContractPageComponent implements OnInit {
       lastname: '',
       email: '',
       address: '',
+      reviews: [],
       phoneNumber: '',
-      rating: 0,
       budget: 0,
       createdAt: new Date(),
     },

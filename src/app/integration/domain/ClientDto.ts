@@ -1,3 +1,5 @@
+import { ReviewDto } from './ReviewDto';
+
 export interface ClientDto {
   id: string;
   username: string;
@@ -7,6 +9,6 @@ export interface ClientDto {
   budget: number;
   address: string;
   phoneNumber: string;
-  rating: number;
+  reviews: Array<ReviewDto>;
   createdAt: Date;
 }

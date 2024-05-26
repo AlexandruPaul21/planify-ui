@@ -5,6 +5,9 @@ import { ProviderDto } from '../../integration/domain/ProviderDto';
 import { ProviderService } from '../../integration/service/provider.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { promiseFromObservable } from '../../integration/utils/rest-utils';
+import { calculateRating } from '../../review/utils/review-utils';
+import { ReviewDto } from '../../integration/domain/ReviewDto';
+import ReviewType = ReviewDto.ReviewTypeEnum;
 
 @Component({
   selector: 'app-providers-master-view',
@@ -12,6 +15,8 @@ import { promiseFromObservable } from '../../integration/utils/rest-utils';
   styleUrls: ['./providers-master-view.component.scss'],
 })
 export class ProvidersMasterViewComponent implements OnInit {
+  protected readonly calculateRating = calculateRating;
+  protected readonly ReviewType = ReviewType;
   public availableServices: ServiceDto[] = [];
   public selectedService: ServiceDto | null = null;
 

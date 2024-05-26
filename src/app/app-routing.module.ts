@@ -3,8 +3,6 @@ import { NgModule } from "@angular/core";
 import { LoginComponent } from "./authentication/login/login.component";
 import { SignUpComponent } from "./authentication/sign-up/sign-up.component";
 import { ProvidersMasterViewComponent } from "./client/providers-master-view/providers-master-view.component";
-import { ClientContractsComponent } from './client/client-contracts/client-contracts.component';
-import { ProviderContractsComponent } from './provider/provider-contracts/provider-contracts.component';
 import { ClientEventsComponent } from './client/client-events/client-events.component';
 import { ClientProfilePageComponent } from './client/client-profile-page/client-profile-page.component';
 import { ProviderProfilePageComponent } from './provider/provider-profile-page/provider-profile-page.component';
@@ -12,6 +10,7 @@ import { ProviderCalendarComponent } from './provider/provider-calendar/provider
 import { ProviderInvoicesComponent } from './provider/provider-invoices/provider-invoices.component';
 import { NewContractPageComponent } from './client/new-contract-page/new-contract-page.component';
 import { ContractDetailsPageComponent } from './contract/contract-details-page/contract-details-page.component';
+import { ContractOverviewTableComponent } from './contract/contract-overview-table/contract-overview-table.component';
 
 const routes: Routes = [
   {
@@ -32,8 +31,8 @@ const routes: Routes = [
     component: ProvidersMasterViewComponent,
   },
   {
-    path: 'client/contracts',
-    component: ClientContractsComponent,
+    path: 'client/contracts/:status',
+    component: ContractOverviewTableComponent,
   },
   {
     path: 'client/events',
@@ -53,7 +52,7 @@ const routes: Routes = [
   },
   {
     path: 'provider/contracts',
-    component: ProviderContractsComponent,
+    component: ContractOverviewTableComponent,
   },
   {
     path: 'provider/invoices',

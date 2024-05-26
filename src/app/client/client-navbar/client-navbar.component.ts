@@ -35,11 +35,11 @@ export class ClientNavbarComponent {
             items: [
                 {
                     label: 'In progress',
-                    routerLink: '/client/contracts'
+                    routerLink: '/client/contracts/progress'
                 },
                 {
                     label: 'Finished',
-                    routerLink: '/client/contracts'
+                    routerLink: '/client/contracts/finished'
                 }
             ]
         }

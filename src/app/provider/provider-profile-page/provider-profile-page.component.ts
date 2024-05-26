@@ -1,4 +1,4 @@
-import { Component, OnInit, Provider } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ServiceService } from "../../integration/service/service.service";
 import { ServiceDto } from "../../integration/domain/ServiceDto";
 import { ProviderDto } from "../../integration/domain/ProviderDto";
@@ -6,6 +6,9 @@ import { Router } from "@angular/router";
 import { ProviderService } from "../../integration/service/provider.service";
 import { MessageService } from "primeng/api";
 import { EMAIL_REGEX } from '../../utils/validation';
+import { calculateRating, filterReviews } from '../../review/utils/review-utils';
+import { ReviewDto } from '../../integration/domain/ReviewDto';
+import ReviewType = ReviewDto.ReviewTypeEnum;
 
 @Component({
   selector: 'app-provider-profile-page',
@@ -14,6 +17,9 @@ import { EMAIL_REGEX } from '../../utils/validation';
   providers: [MessageService],
 })
 export class ProviderProfilePageComponent implements OnInit {
+  protected readonly filterReviews = filterReviews;
+  protected readonly ReviewType = ReviewType;
+  protected readonly calculateRating = calculateRating;
   public editMode = false;
   public existingServices: ServiceDto[] = [];
 
@@ -32,7 +38,7 @@ export class ProviderProfilePageComponent implements OnInit {
     fiscalCode: '',
     address: '',
     phoneNumber: '',
-    rating: 0,
+    reviews: [],
     createdAt: new Date(),
   };
   public loading: boolean = false;
@@ -128,5 +134,14 @@ export class ProviderProfilePageComponent implements OnInit {
         });
       }
     }
+  }
+
+  public async reviewsUpdated(): Promise<void> {
+    await this.ngOnInit();
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Review deleted',
+      detail: 'The review was successfully deleted',
+    });
   }
 }

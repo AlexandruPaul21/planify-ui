@@ -42,6 +42,7 @@ export class LoginComponent implements OnInit {
       const response = await this.authenticationService.signIn(this.signInDto);
       localStorage.setItem('token', response.token);
       localStorage.setItem('id', response.id);
+      localStorage.setItem('role', response.role);
       if (response.role === 'CLIENT') {
         await this.router.navigate(['/client/profile']);
       } else {

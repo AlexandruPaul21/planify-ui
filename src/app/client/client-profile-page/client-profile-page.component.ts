@@ -4,6 +4,9 @@ import { Router } from "@angular/router";
 import { ClientService } from "../../integration/service/client.service";
 import { MessageService } from "primeng/api";
 import { EMAIL_REGEX } from '../../utils/validation';
+import { calculateRating, filterReviews } from '../../review/utils/review-utils';
+import { ReviewDto } from '../../integration/domain/ReviewDto';
+import ReviewType = ReviewDto.ReviewTypeEnum;
 
 @Component({
   selector: 'app-client-profile-page',
@@ -12,6 +15,8 @@ import { EMAIL_REGEX } from '../../utils/validation';
   providers: [MessageService],
 })
 export class ClientProfilePageComponent implements OnInit {
+  protected readonly calculateRating = calculateRating;
+  protected readonly ReviewType = ReviewType;
   public editMode = false;
   public validationMessage = '';
 
@@ -23,7 +28,7 @@ export class ClientProfilePageComponent implements OnInit {
     email: '',
     address: '',
     phoneNumber: '',
-    rating: 0,
+    reviews: [],
     budget: 0,
     createdAt: new Date(),
   }
@@ -122,4 +127,6 @@ export class ClientProfilePageComponent implements OnInit {
       }
     }
   }
+
+  protected readonly filterReviews = filterReviews;
 }

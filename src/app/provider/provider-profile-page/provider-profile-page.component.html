@@ -1,9 +1,10 @@
 <provider-navbar></provider-navbar>
-<div class="flex justify-content-center">
+<div class="flex align-items-center flex-column">
     <p-toast></p-toast>
     <p-card
             header="My profile ({{ provider.username.length === 0 ?'username' : provider.username }})"
-            subheader="Rating: 0.0/5" class="flex-50"
+            subheader="Rating: {{ calculateRating(provider.reviews, ReviewType.CLIENT_REVIEW) | rating }}"
+            class="profile-card-width"
     >
         <div>
             <span class="p-float-label mt-5">
@@ -54,6 +55,22 @@
             <button pButton pRipple label="Edit" *ngIf="!editMode" (click)="editMode = true"></button>
         </ng-template>
     </p-card>
+    <div class="flex flex-row profile-card-width">
+        <reviews-tab
+            class="flex-50"
+            header="Your reviews"
+            subheader="See how people reviewed your services"
+            [reviews]="filterReviews(provider.reviews, ReviewType.CLIENT_REVIEW)"
+        ></reviews-tab>
+        <reviews-tab
+            class="flex-50"
+            header="How you've been reviewed"
+            subheader="See how you reviewed the clients which interacted with you"
+            [owner]="true"
+            [reviews]="filterReviews(provider.reviews, ReviewType.PROVIDER_REVIEW)"
+            (reviewsChanged)="reviewsUpdated()"
+        ></reviews-tab>
+    </div>
 </div>
 <p-dialog
     [(visible)]="loading"

@@ -1,4 +1,9 @@
-<client-navbar></client-navbar>
+<div *ngIf="role === 'CLIENT'">
+    <client-navbar></client-navbar>
+</div>
+<div *ngIf="role === 'PROVIDER'">
+    <provider-navbar></provider-navbar>
+</div>
 <div class="flex justify-content-center">
     <p-toast></p-toast>
     <p-card
@@ -15,7 +20,7 @@
                 mode="currency"
                 currency="EUR"
                 [(ngModel)]="contract.price"
-                [readonly]="true"
+                [readonly]="!workflowMode || !isInEditableState(workflowStatus)"
             ></p-inputNumber>
             <label>Price</label>
         </span>
@@ -25,7 +30,7 @@
                 mode="currency"
                 currency="EUR"
                 [(ngModel)]="contract.advancePayment"
-                [readonly]="true"
+                [readonly]="!workflowMode || !isInEditableState(workflowStatus)"
             ></p-inputNumber>
             <label>Advance Payment</label>
         </span>
@@ -35,7 +40,7 @@
                 id="notes"
                 pInputText
                 [(ngModel)]="contract.clientNotes"
-                [readonly]="true"
+                [readonly]="!workflowMode || role === 'PROVIDER'"
             />
             <label for="notes">Your notes</label>
         </span>
@@ -45,7 +50,7 @@
                 id="provider-notes"
                 pInputText
                 [(ngModel)]="contract.providerNotes"
-                [readonly]="true"
+                [readonly]="!workflowMode || role === 'CLIENT'"
             />
             <label for="provider-notes">Provider notes</label>
         </span>
@@ -55,14 +60,85 @@
             <div class="mt-2">
                 <p-calendar
                     [(ngModel)]="contract.contractDate"
-                    [disabled]="true"
+                    [disabled]="!workflowMode || !isInEditableState(workflowStatus)"
                     dateFormat="dd.mm.yy"
                 ></p-calendar>
             </div>
         </div>
 
         <ng-template pTemplate="footer">
-
+            <div class="flex flex-row" *ngIf="!workflowMode">
+                <div *ngFor="let status of acceptedStatuses" class="ml-2">
+                    <transition-button
+                        [toStatus]="status"
+                        (onClick)="goToStatus(status)"
+                    ></transition-button>
+                </div>
+                <div *ngIf="needsReview">
+                    <p-button
+                        label="Leave a review!"
+                        [outlined]="true"
+                        (onClick)="reviewPageVisible = true"
+                        severity="help"
+                    ></p-button>
+                    <p-dialog
+                        header="Leave a review"
+                        [modal]="true"
+                        class="review-dialog"
+                        [(visible)]="reviewPageVisible"
+                    >
+                        <span class="p-text-secondary block mb-5">Fill the form below to review your interaction</span>
+                        <p-rating [cancel]="false" [(ngModel)]="createReviewDto.rating"></p-rating>
+                        <div class="p-float-label mt-5">
+                            <input id="title" pInputText [(ngModel)]="createReviewDto.title"/>
+                            <label for="title">Title*</label>
+                        </div>
+                        <div class="p-float-label mt-5 mb-3">
+                            <textarea
+                                rows="6"
+                                cols="40"
+                                id="text"
+                                [(ngModel)]="createReviewDto.text"
+                                pInputTextarea
+                            ></textarea>
+                            <label for="text">Your review*</label>
+                        </div>
+                        <div class="flex justify-content-end">
+                            <p-button
+                                label="Clear"
+                                [outlined]="true"
+                                severity="secondary"
+                                (onClick)="clearCreateReview()"
+                            ></p-button>
+                            <p-button
+                                label="Cancel"
+                                class="ml-2"
+                                [outlined]="true"
+                                (onClick)="reviewPageVisible = false"
+                            ></p-button>
+                            <p-button
+                                label="Save"
+                                class="ml-2"
+                                [disabled]="!isReviewSaveEnabled()"
+                                (onClick)="saveReviewClicked()"
+                            ></p-button>
+                        </div>
+                    </p-dialog>
+                </div>
+            </div>
+            <div class="flex flex-row" *ngIf="workflowMode">
+                <p-button
+                    label="Abort"
+                    icon="pi pi-times"
+                    class="mr-2"
+                    [outlined]="true"
+                    (onClick)="refreshStatus()"
+                ></p-button>
+                <transition-button
+                    [toStatus]="workflowStatus"
+                    (onClick)="saveInformation()"
+                ></transition-button>
+            </div>
         </ng-template>
     </p-card>
 </div>

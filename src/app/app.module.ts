@@ -20,10 +20,8 @@ import { RippleModule } from "primeng/ripple";
 import { ProvidersMasterViewComponent } from './client/providers-master-view/providers-master-view.component';
 import { TableModule } from "primeng/table";
 import { MenubarModule } from "primeng/menubar";
-import { ClientContractsComponent } from './client/client-contracts/client-contracts.component';
 import { ProviderProfilePageComponent } from './provider/provider-profile-page/provider-profile-page.component';
 import { ClientProfilePageComponent } from './client/client-profile-page/client-profile-page.component';
-import { ProviderContractsComponent } from './provider/provider-contracts/provider-contracts.component';
 import { ClientEventsComponent } from './client/client-events/client-events.component';
 import { ClientNavbarComponent } from './client/client-navbar/client-navbar.component';
 import { NgOptimizedImage } from '@angular/common';
@@ -43,6 +41,12 @@ import { StatusChipComponent } from './contract/status-chip/status-chip.componen
 import { StripUnderscorePipe } from './utils/pipes/strip-underscore.pipe';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { DialogModule } from 'primeng/dialog';
+import { ContractOverviewTableComponent } from './contract/contract-overview-table/contract-overview-table.component';
+import { TransitionButtonComponent } from './contract/transition-button/transition-button.component';
+import { RatingModule } from "primeng/rating";
+import { ReviewsTabComponent } from './review/reviews-tab/reviews-tab.component';
+import { ReviewEntryComponent } from './review/review-entry/review-entry.component';
+import { InputTextareaModule } from "primeng/inputtextarea";
 
 @NgModule({
   declarations: [
@@ -50,10 +54,8 @@ import { DialogModule } from 'primeng/dialog';
     LoginComponent,
     SignUpComponent,
     ProvidersMasterViewComponent,
-    ClientContractsComponent,
     ProviderProfilePageComponent,
     ClientProfilePageComponent,
-    ProviderContractsComponent,
     ClientEventsComponent,
     ClientNavbarComponent,
     ProviderNavbarComponent,
@@ -63,7 +65,11 @@ import { DialogModule } from 'primeng/dialog';
     NewContractPageComponent,
     ContractDetailsPageComponent,
     StatusChipComponent,
-    StripUnderscorePipe
+    StripUnderscorePipe,
+    ContractOverviewTableComponent,
+    TransitionButtonComponent,
+    ReviewsTabComponent,
+    ReviewEntryComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -92,6 +98,8 @@ import { DialogModule } from 'primeng/dialog';
     MessagesModule,
     ProgressSpinnerModule,
     DialogModule,
+    RatingModule,
+    InputTextareaModule,
   ],
   providers: [RatingPipe],
   bootstrap: [AppComponent]

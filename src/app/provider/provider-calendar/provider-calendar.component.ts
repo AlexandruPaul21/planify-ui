@@ -1,22 +1,54 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ContractService } from '../../integration/service/contract.service';
+import { ContractDto } from '../../integration/domain/ContractDto';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-provider-calendar',
   templateUrl: './provider-calendar.component.html',
-  styleUrls: ['./provider-calendar.component.scss']
+  styleUrls: ['./provider-calendar.component.scss'],
 })
-export class ProviderCalendarComponent {
+export class ProviderCalendarComponent implements OnInit {
   public selectedDate: Date = new Date();
-  public dates: Date[] = [new Date("2024-02-14"), new Date("2024-03-10")];
+  public dates: Date[] = [];
   public loading: boolean = false;
 
-  public containsDate(date: any): boolean {
-    return this.dates.find((actualDate) => this.equalDates(actualDate, date)) != null;
+  public contracts: ContractDto[] = [];
+  public visibleContracts: ContractDto[] = [];
+
+  public constructor(
+    private contractService: ContractService,
+    private router: Router,
+  ) {
   }
 
-  private equalDates(date1: Date, date2: any): boolean {
+  public async ngOnInit(): Promise<void> {
+    this.dates = (await this.contractService.getAllContractDatesForProvider(localStorage.getItem('id')!!)).map(date => new Date(date));
+    this.contracts = await this.contractService.getAllContracts(localStorage.getItem('id')!!);
+    await this.onDateChange();
+  }
+
+  public containsDate(date: any): boolean {
+    return this.dates.find((actualDate) => this.equalDateToAny(actualDate, date)) != null;
+  }
+
+  private equalDateToAny(date1: Date, date2: any): boolean {
     return date1.getFullYear() === date2.year &&
       date1.getMonth() === date2.month &&
       date1.getDate() === date2.day;
+  }
+
+  private equalDateToDate(date1: Date, date2: Date): boolean {
+    return date1.getFullYear() === date2.getFullYear() &&
+      date1.getMonth() === date2.getMonth() &&
+      date1.getDate() === date2.getDate();
+  }
+
+  public async onClickContractRow(contract: ContractDto): Promise<void> {
+    await this.router.navigate(['/contract/', contract.id]);
+  }
+
+  public async onDateChange(): Promise<void> {
+    this.visibleContracts = this.contracts.filter(contract => this.equalDateToDate(this.selectedDate, new Date(contract.contractDate)));
   }
 }

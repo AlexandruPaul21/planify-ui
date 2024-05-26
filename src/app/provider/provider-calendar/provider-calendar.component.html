@@ -4,6 +4,7 @@
         <p-calendar
             class="max-w-full"
             [(ngModel)]="selectedDate"
+            (ngModelChange)="onDateChange()"
             [inline]="true"
         >
             <ng-template pTemplate="date" let-date>
@@ -11,7 +12,7 @@
             </ng-template>
         </p-calendar>
         <div class="mt-2">
-            <p-table>
+            <p-table [value]="visibleContracts">
                 <ng-template pTemplate="caption">
                     Contracts for date: {{ selectedDate | date : 'dd-MMM-yyyy' }}
                 </ng-template>
@@ -19,13 +20,31 @@
                     <tr>
                         <th>Service</th>
                         <th>Status</th>
+                        <th>Client</th>
+                        <th>Price</th>
+                        <th>Advance Payment</th>
                         <th>Date</th>
-                        <th>Approved</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-contract>
+                    <tr
+                        (click)="onClickContractRow(contract)"
+                    >
+                        <td>{{ contract.service['serviceName'] }}</td>
+                        <td>
+                            <status-chip
+                                [status]="contract.status"
+                            ></status-chip>
+                        </td>
+                        <td>{{ contract.client.firstname }}</td>
+                        <td>{{ contract.price | currency : 'EUR' }}</td>
+                        <td>{{ contract.advancePayment | currency : 'EUR' }}</td>
+                        <td>{{ contract.contractDate | date : 'dd MMM yyyy' }}</td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="emptymessage">
                     <tr>
-                        <td [attr.colspan]="4" style="height: 10rem">
+                        <td [attr.colspan]="5" style="height: 25rem">
                             <div class="flex justify-content-center">
                                 <i class="pi pi-search mr-1"></i>No results found
                             </div>

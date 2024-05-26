@@ -27,7 +27,7 @@
                     <td>{{ getOfferedServicesString(provider) }}</td>
                     <td>{{ provider.address }}</td>
                     <td>{{ provider.phoneNumber }}</td>
-                    <td>{{ provider.rating | rating }}</td>
+                    <td>{{ calculateRating(provider, ReviewType.CLIENT_REVIEW) | rating }}</td>
                     <td>
                         <p-button
                             label="Contact"
