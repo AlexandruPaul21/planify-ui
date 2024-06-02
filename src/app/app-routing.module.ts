@@ -11,6 +11,9 @@ import { ProviderInvoicesComponent } from './provider/provider-invoices/provider
 import { NewContractPageComponent } from './client/new-contract-page/new-contract-page.component';
 import { ContractDetailsPageComponent } from './contract/contract-details-page/contract-details-page.component';
 import { ContractOverviewTableComponent } from './contract/contract-overview-table/contract-overview-table.component';
+import {
+  ProviderClientsOverviewComponent
+} from './provider/provider-clients-overview/provider-clients-overview.component';
 
 const routes: Routes = [
   {
@@ -53,6 +56,10 @@ const routes: Routes = [
   {
     path: 'provider/contracts',
     component: ContractOverviewTableComponent,
+  },
+  {
+    path: 'provider/my-clients',
+    component: ProviderClientsOverviewComponent,
   },
   {
     path: 'provider/invoices',

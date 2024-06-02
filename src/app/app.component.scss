@@ -1,4 +1,8 @@
 :host ::ng-deep {
+  .loading-spinner .p-dialog.p-dialog {
+    box-shadow: none;
+  }
+
   .p-dialog-content {
     background: fixed;
   }

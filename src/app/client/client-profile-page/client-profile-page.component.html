@@ -57,29 +57,23 @@
         </ng-template>
     </p-card>
     <div class="flex flex-row profile-card-width">
-        <reviews-tab
-            class="flex-50"
-            header="Your reviews"
-            subheader="See how people reviewed the interaction with you"
-            [reviews]="filterReviews(client.reviews, ReviewType.PROVIDER_REVIEW)"
-        ></reviews-tab>
-        <reviews-tab
-            class="flex-50"
-            header="How you've been reviewed"
-            subheader="See how you reviewed your received services"
-            [owner]="true"
-            [reviews]="filterReviews(client.reviews, ReviewType.CLIENT_REVIEW)"
-        ></reviews-tab>
+        <p-card class="flex-100">
+            <div class="flex flex-row">
+                <reviews-tab
+                    class="flex-50 mr-2"
+                    header="Your reviews"
+                    subheader="See how people reviewed the interaction with you"
+                    [reviews]="filterReviews(client.reviews, ReviewType.PROVIDER_REVIEW)"
+                ></reviews-tab>
+                <reviews-tab
+                    class="flex-50"
+                    header="How you've been reviewed"
+                    subheader="See how you reviewed your received services"
+                    [owner]="true"
+                    [reviews]="filterReviews(client.reviews, ReviewType.CLIENT_REVIEW)"
+                    (reviewsChanged)="reviewsUpdated()"
+                ></reviews-tab>
+            </div>
+        </p-card>
     </div>
 </div>
-<p-dialog
-    [(visible)]="loading"
-    [focusTrap]="true"
-    [draggable]="false"
-    [showHeader]="false"
-    [modal]="true"
-    [closable]="false"
-    [style]="{ width: '30%' }"
->
-    <p-progressSpinner class="progress-spinner"></p-progressSpinner>
-</p-dialog>

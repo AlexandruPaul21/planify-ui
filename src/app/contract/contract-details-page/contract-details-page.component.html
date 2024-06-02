@@ -74,6 +74,13 @@
                         (onClick)="goToStatus(status)"
                     ></transition-button>
                 </div>
+                <div *ngIf="canGenerateInvoice" class="ml-2 mr-2">
+                    <p-button
+                        [outlined]="true"
+                        label="Generate the invoice"
+                        (onClick)="generateInvoiceForContract()"
+                    ></p-button>
+                </div>
                 <div *ngIf="needsReview">
                     <p-button
                         label="Leave a review!"
@@ -142,14 +149,3 @@
         </ng-template>
     </p-card>
 </div>
-<p-dialog
-    [(visible)]="loading"
-    [focusTrap]="true"
-    [draggable]="false"
-    [showHeader]="false"
-    [modal]="true"
-    [closable]="false"
-    [style]="{ width: '30%' }"
->
-    <p-progressSpinner class="progress-spinner"></p-progressSpinner>
-</p-dialog>

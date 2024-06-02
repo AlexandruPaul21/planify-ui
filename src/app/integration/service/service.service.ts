@@ -8,10 +8,9 @@ import { promiseFromObservable } from '../utils/rest-utils';
   providedIn: 'root'
 })
 export class ServiceService {
-
   public constructor(private http: HttpClient) {}
 
   public getAllServices(): Promise<ServiceDto[]> {
-    return promiseFromObservable(this.http.get<ServiceDto[]>(SERVER_URL + '/services'));
+    return promiseFromObservable(this.http.get<ServiceDto[]>(`${SERVER_URL}/services`));
   }
 }

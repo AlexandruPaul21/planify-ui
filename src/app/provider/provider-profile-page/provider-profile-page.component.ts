@@ -8,8 +8,9 @@ import { MessageService } from "primeng/api";
 import { EMAIL_REGEX } from '../../utils/validation';
 import { calculateRating, filterReviews } from '../../review/utils/review-utils';
 import { ReviewDto } from '../../integration/domain/ReviewDto';
-import ReviewType = ReviewDto.ReviewTypeEnum;
 import { MapsService } from '../../integration/service/maps.service';
+import { LoadingSpinnerStore } from '../../reactivity/store/loading-spinner.store';
+import ReviewType = ReviewDto.ReviewTypeEnum;
 
 @Component({
   selector: 'app-provider-profile-page',
@@ -19,8 +20,8 @@ import { MapsService } from '../../integration/service/maps.service';
 })
 export class ProviderProfilePageComponent implements OnInit {
   protected readonly filterReviews = filterReviews;
-  protected readonly ReviewType = ReviewType;
   protected readonly calculateRating = calculateRating;
+  protected readonly ReviewType = ReviewType;
   public editMode = false;
   public existingServices: ServiceDto[] = [];
 
@@ -43,7 +44,6 @@ export class ProviderProfilePageComponent implements OnInit {
     reviews: [],
     createdAt: new Date(),
   };
-  public loading: boolean = false;
 
   public constructor(
     private serviceService: ServiceService,
@@ -51,28 +51,21 @@ export class ProviderProfilePageComponent implements OnInit {
     private providerService: ProviderService,
     private messageService: MessageService,
     private mapsService: MapsService,
-  ) {
-  }
+    private loadingSpinnerStore: LoadingSpinnerStore,
+  ) {}
 
   public async ngOnInit(): Promise<void> {
-    this.loading = true;
+    this.loadingSpinnerStore.update( { loading: true });
     this.existingServices = await this.serviceService.getAllServices();
     this.servicesString = this.existingServices.map(service => service.serviceName);
 
-    const providerId = localStorage.getItem('id');
-    if (providerId == null) {
-      this.loading = false;
-      await this.redirectToLogin();
-      return;
-    }
-
     try {
-      this.provider = await this.providerService.getById(providerId);
+      this.provider = await this.providerService.getCurrentProvider();
       this.selectedServices = this.provider.offeredServices.map(service => service.serviceName);
     } catch (e: any) {
       await this.redirectToLogin();
     } finally {
-      this.loading = false;
+      this.loadingSpinnerStore.update( { loading: false });
     }
   }
 

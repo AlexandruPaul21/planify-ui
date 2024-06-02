@@ -1,6 +1,6 @@
 <client-navbar></client-navbar>
 <div class="flex justify-content-center">
-    <p-card header="Existing providers" class="flex-50">
+    <p-card header="Existing providers" class="flex-70">
         <div class="mb-2">
             <p-dropdown
                 placeholder="Service"
@@ -19,6 +19,7 @@
                     <th>Phone number</th>
                     <th>Rating</th>
                     <th>Contract</th>
+                    <th>Provider's reviews</th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-provider>
@@ -27,7 +28,7 @@
                     <td>{{ getOfferedServicesString(provider) }}</td>
                     <td>{{ provider.address }}</td>
                     <td>{{ provider.phoneNumber }}</td>
-                    <td>{{ calculateRating(provider, ReviewType.CLIENT_REVIEW) | rating }}</td>
+                    <td>{{ calculateRating(provider.reviews, ReviewType.CLIENT_REVIEW) | rating }}</td>
                     <td>
                         <p-button
                             label="Contact"
@@ -35,11 +36,17 @@
                             (onClick)="onContactProviderClicked(provider)"
                         ></p-button>
                     </td>
+                    <td>
+                        <p-button
+                            label="Reviews"
+                            (onClick)="reviewsTabOpen = !reviewsTabOpen; activeProvider = provider"
+                        ></p-button>
+                    </td>
                 </tr>
             </ng-template>
             <ng-template pTemplate="emptymessage">
                 <tr>
-                    <td [attr.colspan]="6" style="height: 25rem">
+                    <td [attr.colspan]="7" style="height: 25rem">
                         <div class="flex justify-content-center">
                             <i class="pi pi-search mr-1"></i>No results found
                         </div>
@@ -50,13 +57,19 @@
     </p-card>
 </div>
 <p-dialog
-    [(visible)]="loading"
+    [(visible)]="reviewsTabOpen"
     [focusTrap]="true"
-    [draggable]="false"
-    [showHeader]="false"
     [modal]="true"
-    [closable]="false"
-    [style]="{ width: '30%' }"
+    header="{{ activeProvider?.name ?? '' }}'s reviews"
+    class="reviews-dialog"
 >
-    <p-progressSpinner class="progress-spinner"></p-progressSpinner>
+    <reviews-tab
+        header="How people reviewed"
+        subheader=""
+        [reviews]="filterReviews(activeProvider?.reviews ?? [], ReviewType.CLIENT_REVIEW)"
+    ></reviews-tab>
+    <reviews-tab
+        header="How the provider reviewed other clients"
+        [reviews]="filterReviews(activeProvider?.reviews ?? [], ReviewType.PROVIDER_REVIEW)"
+    ></reviews-tab>
 </p-dialog>

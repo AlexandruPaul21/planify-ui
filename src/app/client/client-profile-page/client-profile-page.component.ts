@@ -8,6 +8,7 @@ import { calculateRating, filterReviews } from '../../review/utils/review-utils'
 import { ReviewDto } from '../../integration/domain/ReviewDto';
 import ReviewType = ReviewDto.ReviewTypeEnum;
 import { MapsService } from '../../integration/service/maps.service';
+import { LoadingSpinnerStore } from '../../reactivity/store/loading-spinner.store';
 
 @Component({
   selector: 'app-client-profile-page',
@@ -34,32 +35,25 @@ export class ClientProfilePageComponent implements OnInit {
     budget: 0,
     createdAt: new Date(),
   }
-  public loading: boolean = false;
 
   public constructor(
     private router: Router,
     private clientService: ClientService,
     private messageService: MessageService,
     private mapsService: MapsService,
+    private loadingSpinnerStore: LoadingSpinnerStore,
   ) {
   }
 
   public async ngOnInit(): Promise<void> {
-    this.loading = true;
-    const clientId = localStorage.getItem('id');
-
-    if (clientId == null) {
-      this.loading = false;
-      await this.redirectToLogin();
-      return;
-    }
+    this.loadingSpinnerStore.update( { loading: true });
 
     try {
-      this.client = await this.clientService.getById(clientId);
+      this.client = await this.clientService.getCurrentClient();
     } catch (e: any) {
       await this.redirectToLogin();
     } finally {
-      this.loading = false;
+      this.loadingSpinnerStore.update( { loading: false });
     }
   }
 
@@ -137,4 +131,13 @@ export class ClientProfilePageComponent implements OnInit {
   }
 
   protected readonly filterReviews = filterReviews;
+
+  public async reviewsUpdated(): Promise<void> {
+    await this.ngOnInit();
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Review deleted',
+      detail: 'The review was successfully deleted',
+    });
+  }
 }

@@ -7,6 +7,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 import ContractStatus = ContractDto.ContractStatusEnum;
 import { ReviewService } from '../../integration/service/review.service';
 import { CreateReviewDto } from '../../integration/domain/CreateReviewDto';
+import { downloadFile } from '../../integration/utils/rest-utils';
+import { LoadingSpinnerStore } from '../../reactivity/store/loading-spinner.store';
+
 const PRICE_DATE_EDITABLE_STATES = [ContractStatus.ORDERED, ContractStatus.DECLINED_PROVIDER, ContractStatus.DECLINED_CLIENT]
 
 @Component({
@@ -24,7 +27,7 @@ export class ContractDetailsPageComponent implements OnInit {
       [ContractStatus.ACCEPTED_PROVIDER, [ContractStatus.CANCELLED]],
       [ContractStatus.ACCEPTED_CLIENT, [ContractStatus.STARTED, ContractStatus.CANCELLED]],
       [ContractStatus.FINISHED, [ContractStatus.PAID]],
-    ]
+    ],
   );
 
   public workflowClient: Map<ContractStatus, ContractStatus[]> = new Map(
@@ -33,8 +36,7 @@ export class ContractDetailsPageComponent implements OnInit {
       [ContractStatus.ACCEPTED_PROVIDER, [ContractStatus.ACCEPTED_CLIENT, ContractStatus.DECLINED_CLIENT, ContractStatus.CANCELLED]],
       [ContractStatus.DECLINED_PROVIDER, [ContractStatus.ORDERED, ContractStatus.CANCELLED]],
       [ContractStatus.STARTED, [ContractStatus.FINISHED]],
-      [ContractStatus.FINISHED, [ContractStatus.PAID]],
-    ]
+    ],
   )
 
   public createReviewDto: CreateReviewDto = {
@@ -44,7 +46,6 @@ export class ContractDetailsPageComponent implements OnInit {
     contractId: '',
   };
   public contract: ContractDto | null = null;
-  public loading: boolean = false;
   public needsReview: boolean = false;
   public reviewPageVisible: boolean = false;
   public role: string = '';
@@ -53,19 +54,22 @@ export class ContractDetailsPageComponent implements OnInit {
   public workflowStatus: ContractStatus = ContractStatus.ORDERED;
 
   public acceptedStatuses: ContractStatus[] = [];
+  public canGenerateInvoice = false;
 
   public constructor(
     private contractService: ContractService,
     private route: ActivatedRoute,
     private messageService: MessageService,
     private reviewService: ReviewService,
+    private loadingSpinnerStore: LoadingSpinnerStore,
   ) {
   }
 
   public async ngOnInit(): Promise<void> {
-    this.loading = true;
+    this.loadingSpinnerStore.update( { loading: true });
     const id = this.route.snapshot.paramMap.get('id')!!;
     this.contract = await this.contractService.findById(id);
+    this.canGenerateInvoice = [ContractStatus.PAID, ContractStatus.FINISHED].find(status => this.contract!!.status === status) != null;
 
     this.role = localStorage.getItem('role')!!;
 
@@ -76,7 +80,7 @@ export class ContractDetailsPageComponent implements OnInit {
     }
 
     this.contract.contractDate = new Date(this.contract.contractDate);
-    this.loading = false;
+    this.loadingSpinnerStore.update( { loading: false });
 
     if (this.contract == null) {
       this.needsReview = false;
@@ -84,8 +88,8 @@ export class ContractDetailsPageComponent implements OnInit {
       const contractReviewState = await this.reviewService.getReviewStateByContractId(this.contract.id);
       this.needsReview = this.contract.status === ContractStatus.PAID &&
         (
-          (this.role === 'PROVIDER' && !contractReviewState.providerReviewed) ||
-          (this.role === 'CLIENT' && !contractReviewState.clientReviewed)
+          (this.role === 'PROVIDER' && ! contractReviewState.providerReviewed) ||
+          (this.role === 'CLIENT' && ! contractReviewState.clientReviewed)
         )
       this.createReviewDto.contractId = this.contract.id;
     }
@@ -156,5 +160,12 @@ export class ContractDetailsPageComponent implements OnInit {
       detail: 'The review was added successfully',
     });
     await this.ngOnInit();
+  }
+
+  public async generateInvoiceForContract(): Promise<void> {
+    this.loadingSpinnerStore.update({ loading: true });
+    const invoice = await this.contractService.generateInvoice(this.contract?.id!!);
+    downloadFile(invoice);
+    this.loadingSpinnerStore.update({ loading: false});
   }
 }

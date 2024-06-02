@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
@@ -48,6 +48,8 @@ import { ReviewsTabComponent } from './review/reviews-tab/reviews-tab.component'
 import { ReviewEntryComponent } from './review/review-entry/review-entry.component';
 import { InputTextareaModule } from "primeng/inputtextarea";
 import { AutoCompleteModule } from "primeng/autocomplete";
+import { PlanifyErrorHandler } from './utils/error-handler';
+import { ProviderClientsOverviewComponent } from './provider/provider-clients-overview/provider-clients-overview.component';
 
 @NgModule({
   declarations: [
@@ -70,7 +72,8 @@ import { AutoCompleteModule } from "primeng/autocomplete";
     ContractOverviewTableComponent,
     TransitionButtonComponent,
     ReviewsTabComponent,
-    ReviewEntryComponent
+    ReviewEntryComponent,
+    ProviderClientsOverviewComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -103,7 +106,7 @@ import { AutoCompleteModule } from "primeng/autocomplete";
     InputTextareaModule,
     AutoCompleteModule,
   ],
-  providers: [RatingPipe],
+  providers: [RatingPipe, {provide: ErrorHandler, useClass: PlanifyErrorHandler}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

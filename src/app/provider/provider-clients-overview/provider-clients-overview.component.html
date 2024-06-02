@@ -1,0 +1,56 @@
+<provider-navbar></provider-navbar>
+<div class="flex justify-content-center">
+    <p-card header="Your clients" class="flex-70">
+        <p-table [value]="clients" class="mt-2">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Phone number</th>
+                    <th>Rating</th>
+                    <th>Reviews</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-client>
+                <tr>
+                    <td>{{ client.firstname }}</td>
+                    <td>{{ client.address }}</td>
+                    <td>{{ client.phoneNumber }}</td>
+                    <td>{{ calculateRating(client.reviews, ReviewType.CLIENT_REVIEW) | rating }}</td>
+                    <td>
+                        <p-button
+                            label="See reviews"
+                            (onClick)="reviewsTabOpen = !reviewsTabOpen; activeClient = client"
+                        ></p-button>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td [attr.colspan]="6" style="height: 25rem">
+                        <div class="flex justify-content-center">
+                            <i class="pi pi-search mr-1"></i>No results found
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </p-card>
+</div>
+<p-dialog
+    [(visible)]="reviewsTabOpen"
+    [modal]="true"
+    [draggable]="false"
+    header="{{ activeClient?.firstname ?? '' }}'s reviews"
+    class="reviews-dialog"
+>
+    <reviews-tab
+        header="How people reviewd him"
+        subheader=""
+        [reviews]="filterReviews(activeClient?.reviews ?? [], ReviewType.PROVIDER_REVIEW)"
+    ></reviews-tab>
+    <reviews-tab
+        header="How the client reviewd other contractors"
+        [reviews]="filterReviews(activeClient?.reviews ?? [], ReviewType.CLIENT_REVIEW)"
+    ></reviews-tab>
+</p-dialog>

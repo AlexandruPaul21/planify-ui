@@ -6,6 +6,8 @@ import { AuthenticationService } from '../../integration/service/auth/authentica
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 import { ServiceDto } from '../../integration/domain/ServiceDto';
+import { MapsService } from '../../integration/service/maps.service';
+import { LoadingSpinnerStore } from '../../reactivity/store/loading-spinner.store';
 
 @Component({
   selector: 'app-sign-up',
@@ -21,6 +23,7 @@ export class SignUpComponent implements OnInit {
   public selectedServices: string[] = [];
   public validationMessage = 'None of the user options are selected!';
 
+  public suggestions: string[] = [];
   public loading: boolean = false;
 
   public clientSignUpDto: ClientSignUpDto = {
@@ -57,10 +60,14 @@ export class SignUpComponent implements OnInit {
     private authenticationService: AuthenticationService,
     private messageService: MessageService,
     private router: Router,
-  ) {}
+    private mapsService: MapsService,
+    private loadingSpinnerStore: LoadingSpinnerStore,
+  ) {
+    this.loadingSpinnerStore.update({ loading: false });
+  }
 
   public async onSignUpClicked(): Promise<void> {
-    this.loading = false;
+    this.loading = true;
     try {
       switch (this.selectedOption) {
         case "Client":
@@ -75,7 +82,6 @@ export class SignUpComponent implements OnInit {
           await this.authenticationService.providerSignUp(this.providerSignUpDto);
           break;
         default:
-          this.showErrorMessage();
           return;
       }
       await this.router.navigate(
@@ -83,18 +89,14 @@ export class SignUpComponent implements OnInit {
         { queryParams: { afterSignUp: true } }
       );
     } catch (e) {
-      this.showErrorMessage();
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Sign up failed',
+        detail: 'Username not unique! Try another, if the problem persist, try again later!',
+      });
     } finally {
-      this.loading = true;
+      this.loading = false;
     }
-  }
-
-  private showErrorMessage() {
-    this.messageService.add({
-      severity: 'error',
-      summary: 'Sign up failed',
-      detail: 'There was an error, try again later',
-    });
   }
 
   public isSignUpEnabled(): boolean {
@@ -191,5 +193,10 @@ export class SignUpComponent implements OnInit {
     }
 
     return this.validationMessage === '';
+  }
+
+  public async completeResults(query: string) {
+    const result = await this.mapsService.getAutocomplete(query);
+    this.suggestions = result.predictions.map(place => place.description);
   }
 }

@@ -1,4 +1,5 @@
 <div class="flex justify-content-center">
+    <p-toast></p-toast>
     <p-card header="Welcome onboard!" class="flex-50">
         <p-dropdown
                 [options]="options"
@@ -23,7 +24,11 @@
                 <label>E-mail*</label>
             </span>
             <span class="p-float-label mt-5">
-                <input pInputText [(ngModel)]="clientSignUpDto.address"/>
+                <p-autoComplete
+                    [(ngModel)]="clientSignUpDto.address"
+                    [suggestions]="suggestions"
+                    (completeMethod)="completeResults($event.query)"
+                ></p-autoComplete>
                 <label>Address*</label>
             </span>
             <span class="p-float-label mt-5">
@@ -57,7 +62,11 @@
                 <label>E-mail*</label>
             </span>
             <span class="p-float-label mt-5">
-                <input pInputText [(ngModel)]="providerSignUpDto.address"/>
+                <p-autoComplete
+                    [(ngModel)]="providerSignUpDto.address"
+                    [suggestions]="suggestions"
+                    (completeMethod)="completeResults($event.query)"
+                ></p-autoComplete>
                 <label>Address*</label>
             </span>
             <span class="p-float-label mt-5">

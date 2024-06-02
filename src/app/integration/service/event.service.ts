@@ -12,7 +12,7 @@ export class EventService {
 
   public getAllEvents() {
     return promiseFromObservable(this.http
-      .get<EventDto[]>(SERVER_URL + '/events', { headers: getAuthorizedHeaders() }),
+      .get<EventDto[]>(`${SERVER_URL}/events`, { headers: getAuthorizedHeaders() }),
     );
   }
 }

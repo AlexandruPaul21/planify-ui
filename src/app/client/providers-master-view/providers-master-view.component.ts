@@ -5,9 +5,10 @@ import { ProviderDto } from '../../integration/domain/ProviderDto';
 import { ProviderService } from '../../integration/service/provider.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { promiseFromObservable } from '../../integration/utils/rest-utils';
-import { calculateRating } from '../../review/utils/review-utils';
+import { calculateRating, filterReviews } from '../../review/utils/review-utils';
 import { ReviewDto } from '../../integration/domain/ReviewDto';
 import ReviewType = ReviewDto.ReviewTypeEnum;
+import { LoadingSpinnerStore } from '../../reactivity/store/loading-spinner.store';
 
 @Component({
   selector: 'app-providers-master-view',
@@ -15,24 +16,27 @@ import ReviewType = ReviewDto.ReviewTypeEnum;
   styleUrls: ['./providers-master-view.component.scss'],
 })
 export class ProvidersMasterViewComponent implements OnInit {
+  protected readonly filterReviews = filterReviews;
   protected readonly calculateRating = calculateRating;
   protected readonly ReviewType = ReviewType;
   public availableServices: ServiceDto[] = [];
   public selectedService: ServiceDto | null = null;
+  public reviewsTabOpen = false;
 
   public providers: ProviderDto[] = [];
-  public loading: boolean = false;
+  public activeProvider: ProviderDto | null = null;
 
   public constructor(
     private serviceService: ServiceService,
     private providerService: ProviderService,
     private route: ActivatedRoute,
+    private loadingSpinnerStore: LoadingSpinnerStore,
     private router: Router,
   ) {
   }
 
   public async ngOnInit(): Promise<void> {
-    this.loading = true;
+    this.loadingSpinnerStore.update( { loading: true });
     this.availableServices = await this.serviceService.getAllServices();
 
     const q = await promiseFromObservable(this.route.queryParams);
@@ -40,18 +44,18 @@ export class ProvidersMasterViewComponent implements OnInit {
       this.selectedService = this.availableServices.find(service => service.serviceName === q['service'])!!;
       await this.onServiceSelectionChange();
     }
-    this.loading = false;
+    this.loadingSpinnerStore.update( { loading: false });
   }
 
   public async onServiceSelectionChange(): Promise<void> {
-    this.loading = true;
+    this.loadingSpinnerStore.update( { loading: true });
     if (this.selectedService == null) {
       this.providers = [];
-      this.loading = false;
+      this.loadingSpinnerStore.update( { loading: false });
       return;
     }
     this.providers = await this.providerService.getByServiceOffered(this.selectedService);
-    this.loading = false;
+    this.loadingSpinnerStore.update( { loading: false });
   }
 
   public getOfferedServicesString(provider: ProviderDto): string {

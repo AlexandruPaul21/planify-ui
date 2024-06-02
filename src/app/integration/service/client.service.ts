@@ -5,22 +5,32 @@ import { getAuthorizedHeaders, promiseFromObservable } from "../utils/rest-utils
 import { SERVER_URL } from "../../config/server-config";
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root',
 })
 export class ClientService {
+  public constructor(private http: HttpClient) {}
 
-    public constructor(private http: HttpClient) {
-    }
+  public getById(id: string): Promise<ClientDto> {
+    return promiseFromObservable(this.http
+      .get<ClientDto>(`${SERVER_URL}/clients/${id}/`, { headers: getAuthorizedHeaders() }),
+    );
+  }
 
-    public getById(id: string): Promise<ClientDto> {
-        return promiseFromObservable(this.http
-            .get<ClientDto>(SERVER_URL + `/clients/${ id }`, { headers: getAuthorizedHeaders() })
-        );
-    }
+  public getCurrentClient(): Promise<ClientDto> {
+    return promiseFromObservable(this.http
+      .get<ClientDto>(`${SERVER_URL}/clients/me/`, { headers: getAuthorizedHeaders() }),
+    )
+  }
 
-    public update(id: string, clientDto: ClientDto): Promise<ClientDto> {
-        return promiseFromObservable(this.http
-            .put<ClientDto>(SERVER_URL + `/clients/${ id }`, clientDto, { headers: getAuthorizedHeaders() })
-        );
-    }
+  public getClientsForAuthenticatedProvider(): Promise<ClientDto[]> {
+    return promiseFromObservable(this.http
+      .get<ClientDto[]>(`${SERVER_URL}/clients/for-provider/`, { headers: getAuthorizedHeaders() }),
+    );
+  }
+
+  public update(id: string, clientDto: ClientDto): Promise<ClientDto> {
+    return promiseFromObservable(this.http
+      .put<ClientDto>(`${SERVER_URL}/clients/${id}/`, clientDto, { headers: getAuthorizedHeaders() }),
+    );
+  }
 }

@@ -3,6 +3,7 @@ import { EventDto } from '../../integration/domain/EventDto';
 import { ServiceDto } from '../../integration/domain/ServiceDto';
 import { EventService } from '../../integration/service/event.service';
 import { Router } from '@angular/router';
+import { LoadingSpinnerStore } from '../../reactivity/store/loading-spinner.store';
 
 @Component({
   selector: 'app-client-events',
@@ -14,18 +15,18 @@ export class ClientEventsComponent implements OnInit {
   public selectedEvent: EventDto | null = null;
 
   public services: ServiceDto[] = [];
-  public loading: boolean = false;
 
   public constructor(
     private eventService: EventService,
     private router: Router,
+    private loadingSpinnerStore: LoadingSpinnerStore,
   ) {
   }
 
   public async ngOnInit(): Promise<void> {
-    this.loading = true;
+    this.loadingSpinnerStore.update( { loading: true });
     this.availableEvents = await this.eventService.getAllEvents();
-    this.loading = false;
+    this.loadingSpinnerStore.update( { loading: false });
   }
 
   public onEventSelectedChange(): void {

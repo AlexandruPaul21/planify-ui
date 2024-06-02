@@ -9,6 +9,7 @@ export function calculateRating(reviews: ReviewDto[], reviewType: ReviewType): n
   if (reviews.length === 0) {
     return -1;
   }
+
   const filteredReviews = filterReviews(reviews, reviewType);
   return filteredReviews
             .map(review => review.rating)

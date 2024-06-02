@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ContractService } from '../../integration/service/contract.service';
 import { ContractDto } from '../../integration/domain/ContractDto';
 import { Router } from '@angular/router';
+import { LoadingSpinnerStore } from '../../reactivity/store/loading-spinner.store';
 
 @Component({
   selector: 'app-provider-calendar',
@@ -18,14 +19,17 @@ export class ProviderCalendarComponent implements OnInit {
 
   public constructor(
     private contractService: ContractService,
+    private loadingSpinnerStore: LoadingSpinnerStore,
     private router: Router,
   ) {
   }
 
   public async ngOnInit(): Promise<void> {
-    this.dates = (await this.contractService.getAllContractDatesForProvider(localStorage.getItem('id')!!)).map(date => new Date(date));
-    this.contracts = await this.contractService.getAllContracts(localStorage.getItem('id')!!);
+    this.loadingSpinnerStore.update({ loading: true });
+    this.dates = (await this.contractService.getAllContractDatesForProvider()).map(date => new Date(date));
+    this.contracts = await this.contractService.getAllContractsByProviderId();
     await this.onDateChange();
+    this.loadingSpinnerStore.update( { loading: false });
   }
 
   public containsDate(date: any): boolean {

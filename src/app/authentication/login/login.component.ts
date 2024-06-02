@@ -4,6 +4,7 @@ import { AuthenticationService } from '../../integration/service/auth/authentica
 import { MessageService } from 'primeng/api';
 import { ActivatedRoute, Router } from '@angular/router';
 import { promiseFromObservable } from '../../integration/utils/rest-utils';
+import { LoadingSpinnerStore } from '../../reactivity/store/loading-spinner.store';
 
 @Component({
   selector: 'app-login',
@@ -21,8 +22,10 @@ export class LoginComponent implements OnInit {
     private messageService: MessageService,
     private route: ActivatedRoute,
     private router: Router,
+    private loadingSpinnerStore: LoadingSpinnerStore,
   ) {
     this.signInDto = { username: '', password: '' }
+    this.loadingSpinnerStore.update({ loading: false });
   }
 
   public async ngOnInit(): Promise<void> {
@@ -34,6 +37,13 @@ export class LoginComponent implements OnInit {
         detail: 'Please log in'
       });
     }
+    if (q['redirected'] != null) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Session expired',
+        detail: 'Please log in'
+      });
+    }
   }
 
   public async onSignInClicked(): Promise<void> {
@@ -41,7 +51,6 @@ export class LoginComponent implements OnInit {
     try {
       const response = await this.authenticationService.signIn(this.signInDto);
       localStorage.setItem('token', response.token);
-      localStorage.setItem('id', response.id);
       localStorage.setItem('role', response.role);
       if (response.role === 'CLIENT') {
         await this.router.navigate(['/client/profile']);

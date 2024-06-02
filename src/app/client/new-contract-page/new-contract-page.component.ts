@@ -8,6 +8,7 @@ import { CreateContractDto } from '../../integration/domain/CreateContractDto';
 import { ClientService } from '../../integration/service/client.service';
 import { ContractService } from '../../integration/service/contract.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { LoadingSpinnerStore } from '../../reactivity/store/loading-spinner.store';
 
 @Component({
   selector: 'app-new-contract-page',
@@ -55,7 +56,6 @@ export class NewContractPageComponent implements OnInit {
     contractDate: new Date(),
   }
   public validationMessage = '';
-  public loading: boolean = false;
 
   public constructor(
     private providerService: ProviderService,
@@ -63,20 +63,13 @@ export class NewContractPageComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private contractService: ContractService,
+    private loadingSpinnerStore: LoadingSpinnerStore,
     private messageService: MessageService,
   ) {}
 
   public async ngOnInit(): Promise<void> {
-    this.loading = true;
-    const clientId = localStorage.getItem('id');
-
-    if (clientId == null) {
-      this.loading = false;
-      await this.router.navigate(['/login']);
-      return ;
-    }
-
-    this.contract.client = await this.clientService.getById(clientId);
+    this.loadingSpinnerStore.update( { loading: true });
+    this.contract.client = await this.clientService.getCurrentClient();
 
     const q = await promiseFromObservable(this.route.queryParams);
 
@@ -85,7 +78,7 @@ export class NewContractPageComponent implements OnInit {
       this.contract.provider = this.provider;
     }
 
-    this.loading = false;
+    this.loadingSpinnerStore.update( { loading: false });
   }
 
   public isSaveEnabled(): boolean {
@@ -111,7 +104,7 @@ export class NewContractPageComponent implements OnInit {
   }
 
   public async onSaveClicked(): Promise<void> {
-    this.loading = true;
+    this.loadingSpinnerStore.update( { loading: true });
     try {
       await this.contractService.createContract(this.contract);
     } catch (e: unknown) {
@@ -119,7 +112,7 @@ export class NewContractPageComponent implements OnInit {
         await this.router.navigate(['/login']);
       }
     } finally {
-      this.loading = false;
+      this.loadingSpinnerStore.update( { loading: false });
     }
 
     this.messageService.add({

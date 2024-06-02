@@ -1,3 +1,15 @@
 <div>
     <router-outlet></router-outlet>
 </div>
+<p-dialog
+    [visible]="(loading$ | async)?.loading ?? false"
+    [focusTrap]="true"
+    [draggable]="false"
+    [showHeader]="false"
+    [modal]="true"
+    [closable]="false"
+    [style]="{ width: '30%' }"
+    class="loading-spinner"
+>
+    <p-progressSpinner class="progress-spinner"></p-progressSpinner>
+</p-dialog>

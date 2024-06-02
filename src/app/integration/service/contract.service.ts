@@ -4,63 +4,63 @@ import { getAuthorizedHeaders, promiseFromObservable } from '../utils/rest-utils
 import { SERVER_URL } from '../../config/server-config';
 import { ContractDto } from '../domain/ContractDto';
 import { CreateContractDto } from '../domain/CreateContractDto';
-import { ProviderContractDto } from '../domain/ProviderContractDto';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ContractService {
-  public constructor(private http: HttpClient) {
-  }
+  public constructor(private http: HttpClient) {}
 
-  public getAllActiveContractsByClientId(id: string): Promise<ContractDto[]> {
+  public getAllActiveContractsForClient(): Promise<ContractDto[]> {
     return promiseFromObservable(this.http
-      .get<ContractDto[]>(SERVER_URL + `/contracts/active/${ id }`, { headers: getAuthorizedHeaders() }),
+      .get<ContractDto[]>(`${SERVER_URL}/contracts/client/active/`, { headers: getAuthorizedHeaders() }),
     );
   }
 
-  public getAllFinalizedContractsByClientId(id: string): Promise<ContractDto[]> {
+  public async generateInvoice(contractId: string): Promise<Blob> {
     return promiseFromObservable(this.http
-      .get<ContractDto[]>(SERVER_URL + `/contracts/finalized/${ id }`, { headers: getAuthorizedHeaders() }),
+    .get(`${SERVER_URL}/contracts/invoice/${contractId}/`, { responseType: 'blob', headers: getAuthorizedHeaders() }))
+  }
+
+  public getAllFinalizedContractsForClient(): Promise<ContractDto[]> {
+    return promiseFromObservable(this.http
+      .get<ContractDto[]>(`${SERVER_URL}/contracts/client/finalized/`, { headers: getAuthorizedHeaders() }),
     );
   }
 
-  public findById(id: string): Promise<ContractDto> {
+  public findById(contractId: string): Promise<ContractDto> {
     return promiseFromObservable(
-      this.http.get<ContractDto>(SERVER_URL + `/contracts/${ id }`, { headers: getAuthorizedHeaders() }),
+      this.http.get<ContractDto>(`${SERVER_URL}/contracts/${contractId}/`, { headers: getAuthorizedHeaders() }),
     );
   }
 
   public updateContract(contract: ContractDto): Promise<ContractDto> {
     return promiseFromObservable(
-      this.http.put<ContractDto>(SERVER_URL + '/contracts/update', contract, { headers: getAuthorizedHeaders() }),
+      this.http.put<ContractDto>(`${SERVER_URL}/contracts/update/`, contract, { headers: getAuthorizedHeaders() }),
     );
   }
 
   public createContract(contractDto: CreateContractDto): Promise<ContractDto> {
     return promiseFromObservable(
-      this.http.post<ContractDto>(SERVER_URL + '/contracts/new', contractDto, { headers: getAuthorizedHeaders() }),
+      this.http.post<ContractDto>(`${SERVER_URL}/contracts/new/`, contractDto, { headers: getAuthorizedHeaders() }),
     );
   }
 
-  public getAllContractDatesForProvider(providerId: string): Promise<string[]> {
+  public getAllContractDatesForProvider(): Promise<string[]> {
     return promiseFromObservable(
-      this.http.get<string[]>(SERVER_URL + `/contracts/provider/dates/${ providerId }`, { headers: getAuthorizedHeaders() }),
+      this.http.get<string[]>(`${SERVER_URL}/contracts/provider/dates/`, { headers: getAuthorizedHeaders() }),
     );
   }
 
-  public getAllContracts(providerId: string): Promise<ContractDto[]> {
+  public getAllContractsByProviderId(): Promise<ContractDto[]> {
     return promiseFromObservable(
-      this.http.get<ContractDto[]>(SERVER_URL + `/contracts/provider/${ providerId }`, { headers: getAuthorizedHeaders() }),
+      this.http.get<ContractDto[]>(`${SERVER_URL}/contracts/provider/`, { headers: getAuthorizedHeaders() }),
     );
   }
 
-  public findContractsByDate(date: Date, providerId: string): Promise<ContractDto[]> {
+  public getAllFinalizedContractsByProviderId(): Promise<ContractDto[]> {
     return promiseFromObservable(
-      this.http.post<ContractDto[]>(SERVER_URL + '/contracts/provider-date', <ProviderContractDto>{
-        providerId,
-        contractDate: date,
-      }, { headers: getAuthorizedHeaders() })
+      this.http.get<ContractDto[]>(`${SERVER_URL}/contracts/provider/finalized/`, { headers: getAuthorizedHeaders() }),
     );
   }
 }
