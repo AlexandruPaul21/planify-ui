@@ -9,6 +9,7 @@ import { ClientService } from '../../integration/service/client.service';
 import { ContractService } from '../../integration/service/contract.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { LoadingSpinnerStore } from '../../reactivity/store/loading-spinner.store';
+import { ContractDto } from "../../integration/domain/ContractDto";
 
 @Component({
   selector: 'app-new-contract-page',
@@ -17,6 +18,7 @@ import { LoadingSpinnerStore } from '../../reactivity/store/loading-spinner.stor
   providers: [MessageService],
 })
 export class NewContractPageComponent implements OnInit {
+  protected readonly ContractDto = ContractDto;
   public provider: ProviderDto = {
     id: '',
     name: '',
@@ -64,7 +66,6 @@ export class NewContractPageComponent implements OnInit {
     private router: Router,
     private contractService: ContractService,
     private loadingSpinnerStore: LoadingSpinnerStore,
-    private messageService: MessageService,
   ) {}
 
   public async ngOnInit(): Promise<void> {
@@ -105,8 +106,10 @@ export class NewContractPageComponent implements OnInit {
 
   public async onSaveClicked(): Promise<void> {
     this.loadingSpinnerStore.update( { loading: true });
+
     try {
       await this.contractService.createContract(this.contract);
+      await this.router.navigate(['/client/contracts/progress'], { queryParams: { contractSuccess: true } });
     } catch (e: unknown) {
       if (e instanceof HttpErrorResponse && e.status === 403) {
         await this.router.navigate(['/login']);
@@ -114,11 +117,5 @@ export class NewContractPageComponent implements OnInit {
     } finally {
       this.loadingSpinnerStore.update( { loading: false });
     }
-
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Contract created successfully',
-      detail: 'After provider approves it, you will be able to continue'
-    });
   }
 }

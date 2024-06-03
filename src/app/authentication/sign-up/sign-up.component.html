@@ -116,7 +116,7 @@
                 iconPos="right"
                 (click)="onSignUpClicked()"
                 style="pointer-events: auto"
-                [disabled]="!isSignUpEnabled()"
+                [disabled]="!isSignUpEnabled() || loading"
                 [pTooltip]="validationMessage"
             ></button>
         </ng-template>

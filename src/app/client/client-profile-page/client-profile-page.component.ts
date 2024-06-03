@@ -9,6 +9,7 @@ import { ReviewDto } from '../../integration/domain/ReviewDto';
 import ReviewType = ReviewDto.ReviewTypeEnum;
 import { MapsService } from '../../integration/service/maps.service';
 import { LoadingSpinnerStore } from '../../reactivity/store/loading-spinner.store';
+import { ReviewService } from '../../integration/service/review.service';
 
 @Component({
   selector: 'app-client-profile-page',
@@ -42,6 +43,7 @@ export class ClientProfilePageComponent implements OnInit {
     private messageService: MessageService,
     private mapsService: MapsService,
     private loadingSpinnerStore: LoadingSpinnerStore,
+    private reviewService: ReviewService,
   ) {
   }
 
@@ -104,6 +106,7 @@ export class ClientProfilePageComponent implements OnInit {
   }
 
   public async onSaveClicked(): Promise<void> {
+    this.loadingSpinnerStore.update( { loading: true });
     try {
       await this.clientService.update(this.client.id, this.client);
       this.editMode = false;
@@ -122,6 +125,8 @@ export class ClientProfilePageComponent implements OnInit {
           detail: 'There was an error. Please try again!',
         });
       }
+    } finally {
+      this.loadingSpinnerStore.update( { loading: false });
     }
   }
 
@@ -131,13 +136,19 @@ export class ClientProfilePageComponent implements OnInit {
   }
 
   protected readonly filterReviews = filterReviews;
+  public deleteDialogOpen = false;
+  public targetedReviewId = '';
 
-  public async reviewsUpdated(): Promise<void> {
+  public async deleteReview(targetedReviewId: string): Promise<void> {
+    this.loadingSpinnerStore.update( { loading: true });
+    await this.reviewService.deleteReview(targetedReviewId);
+    this.deleteDialogOpen = false;
     await this.ngOnInit();
     this.messageService.add({
       severity: 'success',
       summary: 'Review deleted',
       detail: 'The review was successfully deleted',
     });
+    this.loadingSpinnerStore.update( { loading: false });
   }
 }

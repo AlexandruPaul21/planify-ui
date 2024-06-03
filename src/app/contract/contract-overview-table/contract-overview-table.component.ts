@@ -4,11 +4,14 @@ import { ContractDto } from '../../integration/domain/ContractDto';
 import { ContractService } from '../../integration/service/contract.service';
 import { Subscription } from 'rxjs';
 import { LoadingSpinnerStore } from '../../reactivity/store/loading-spinner.store';
+import { MessageService } from 'primeng/api';
+import { promiseFromObservable } from '../../integration/utils/rest-utils';
 
 @Component({
   selector: 'app-contract-overview-table',
   templateUrl: './contract-overview-table.component.html',
-  styleUrls: ['./contract-overview-table.component.scss']
+  styleUrls: ['./contract-overview-table.component.scss'],
+  providers: [MessageService],
 })
 export class ContractOverviewTableComponent implements OnInit, OnDestroy {
   public actualRole: 'PROVIDER' | 'CLIENT' | null = null;
@@ -21,6 +24,7 @@ export class ContractOverviewTableComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private contractService: ContractService,
     private loadingSpinnerStore: LoadingSpinnerStore,
+    private messageService: MessageService,
   ) {
     const role = localStorage.getItem('role')!!;
     if (role === 'PROVIDER') {
@@ -33,6 +37,16 @@ export class ContractOverviewTableComponent implements OnInit, OnDestroy {
   }
 
   public async ngOnInit(): Promise<void> {
+    const queryParams = await promiseFromObservable(this.route.queryParams);
+
+    if (queryParams['contractSuccess'] != null) {
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Contract created successfully',
+        detail: 'After provider approves it, you will be able to continue'
+      });
+    }
+
     this.paramMapSubscription = this.route.paramMap.subscribe(async params => {
       this.loadingSpinnerStore.update( { loading: true });
 

@@ -3,7 +3,7 @@
         <review-entry
             [review]="review"
             [owner]="owner"
-            (reviewsChanged)="reviewsChanged.emit()"
+            (reviewsChanged)="reviewsChanged.emit($event)"
         ></review-entry>
     </div>
     <div *ngIf="reviews.length === 0">

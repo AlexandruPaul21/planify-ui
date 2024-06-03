@@ -20,5 +20,5 @@ export class ReviewsTabComponent {
   public owner: boolean = false;
 
   @Output()
-  public reviewsChanged = new EventEmitter<void>();
+  public reviewsChanged = new EventEmitter<string>();
 }

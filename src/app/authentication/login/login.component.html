@@ -2,11 +2,16 @@
     <p-toast></p-toast>
     <p-card header="Welcome back!" class="flex-50">
         <span class="p-float-label mt-5">
-            <input type="text" [(ngModel)]="signInDto.username" pInputText/>
+            <input type="text" [(ngModel)]="signInDto.username" pInputText [disabled]="loading"/>
             <label>Username</label>
         </span>
         <span class="p-float-label mt-5 mb-2">
-            <p-password [feedback]="false" [toggleMask]="true" [(ngModel)]="signInDto.password"></p-password>
+            <p-password
+                [feedback]="false"
+                [toggleMask]="true"
+                [(ngModel)]="signInDto.password"
+                [disabled]="loading"
+            ></p-password>
             <label>Password</label>
         </span>
         Don't have an account?
@@ -20,7 +25,7 @@
                 icon="{{ loading ? 'pi pi-spin pi-spinner' : '' }}"
                 iconPos="right"
                 (click)="onSignInClicked()"
-                [disabled]="!isSignInEnabled()"
+                [disabled]="!isSignInEnabled() || loading"
                 style="pointer-events: auto"
                 [pTooltip]="loginErrorMessages"
             >

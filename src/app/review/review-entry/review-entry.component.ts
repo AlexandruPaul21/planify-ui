@@ -15,14 +15,11 @@ export class ReviewEntryComponent {
   public owner!: boolean;
 
   @Output()
-  public reviewsChanged = new EventEmitter<void>();
+  public reviewsChanged = new EventEmitter<string>();
 
-  public constructor(
-    private reviewService: ReviewService,
-  ) {}
+  public constructor() {}
 
-  public async deleteReview(): Promise<void> {
-    await this.reviewService.deleteReview(this.review.id);
-    this.reviewsChanged.emit();
+  public async deleteReview(id: string): Promise<void> {
+    this.reviewsChanged.emit(id);
   }
 }
